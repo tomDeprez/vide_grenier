@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3309
--- Généré le :  mar. 20 avr. 2021 à 10:16
+-- Généré le :  mar. 20 avr. 2021 à 10:21
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -176,7 +176,7 @@ INSERT INTO `role` (`ID_ROL`, `ADMIN_ROL`, `MEMB_ROL`, `VISIT_ROL`) VALUES
 
 DROP TABLE IF EXISTS `utilisateur`;
 CREATE TABLE IF NOT EXISTS `utilisateur` (
-  `ID_UTIL` int(11) NOT NULL,
+  `ID_UTIL` int(11) NOT NULL AUTO_INCREMENT,
   `ID_ROL` int(11) NOT NULL,
   `NOM_UTIL` text NOT NULL,
   `MDP_UTIL` text NOT NULL,
@@ -184,14 +184,15 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `TEL_UTIL` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`ID_UTIL`),
   KEY `FK_AVOIR` (`ID_ROL`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`ID_UTIL`, `ID_ROL`, `NOM_UTIL`, `MDP_UTIL`, `EMAIL_UTIL`, `TEL_UTIL`) VALUES
-(1, 1, 'root', 'rootroot', 'root@hotmail.fr', '66168214');
+(1, 1, 'root', 'rootroot', 'root@hotmail.fr', '66168214'),
+(2, 1, 'tom', '12345678', 'tomtom@hotmail.com', '661654899');
 
 -- --------------------------------------------------------
 

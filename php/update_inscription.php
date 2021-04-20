@@ -84,7 +84,7 @@ if (isset($_SESSION["id_util"]) && $_POST['mail'] != "") {
                         $tempPass = ", mdp_util = :mdp";
                     }
 
-                    $update_utilisateur = "UPDATE utilisateur SET mail_util = :mail $tempNom $tempPrenom $tempTel $tempDesc $tempPass WHERE id_util = :id";
+                    $update_utilisateur = "UPDATE utilisateur SET email_util = :mail $tempNom $tempPrenom $tempTel $tempDesc $tempPass WHERE id_util = :id";
                     $resultat_update = $base->prepare($update_utilisateur);
                     $resultat_update->bindParam(':id', $_SESSION["id_util"]);
                     $resultat_update->bindParam(':mail', $mail);
