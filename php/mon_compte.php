@@ -54,7 +54,7 @@ if (isset($_SESSION["id_util"])) {
 
                     while ($ligne = $resultat->fetch()) {
 
-                        $mail = $ligne['MAIL_UTIL'];
+                        $mail = $ligne['EMAIL_UTIL'];
 
                         if ($ligne['NOM_UTIL'] != "") {
 
@@ -64,13 +64,13 @@ if (isset($_SESSION["id_util"])) {
                             $nom = "";
                         }
 
-                        if ($ligne['PRENOM_UTIL'] != "") {
-
-                            $prenom = $ligne['PRENOM_UTIL'];
-                        } else {
-
-                            $prenom = "";
-                        }
+//                        if ($ligne['PRENOM_UTIL'] != "") {
+//
+//                            $prenom = $ligne['PRENOM_UTIL'];
+//                        } else {
+//
+//                            $prenom = "";
+//                        }
 
                         if ($ligne['TEL_UTIL'] != "") {
 
@@ -80,48 +80,48 @@ if (isset($_SESSION["id_util"])) {
                             $telephone = "";
                         }
 
-                        if ($ligne['DESC_UTIL'] != "") {
-
-                            $description = $ligne['DESC_UTIL'];
-                        } else {
-
-                            $description = "";
-                        }
+//                        if ($ligne['DESC_UTIL'] != "") {
+//
+//                            $description = $ligne['DESC_UTIL'];
+//                        } else {
+//
+//                            $description = "";
+//                        }
                     }
 
                     // Rescherche et affiche les résa faites
-                    $select_resa = "SELECT * FROM reservation_vg JOIN videgrenier ON reservation_vg.id_vg = videgrenier.id_vg JOIN statuts ON reservation_vg.statu_resa = statuts.id_statuts WHERE id_util = :id";
-                    $resultat_select = $base->prepare($select_resa);
-                    $resultat_select->bindParam(':id', $_SESSION["id_util"]);
-                    $resultat_select->execute();
-
-                    $ok = false;
-
-                    while ($ligne = $resultat_select->fetch()) {
-
-                        $ok = true;
-
-                        
-                        echo "<section id=\"recapResa\">";
-                        echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
-                        echo "<p>Statut de la réservation: " . $ligne['LABEL_STATUTS'] . "</p>";
-                        echo "<p>Date: " . $ligne['DATE_VG'] . " " . $ligne['HEURE_VG']  . "</p>";
-                        echo "<p>Adresse: " . $ligne['ADDRESSE_VG'] . "</p>";
-                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_RESA'] . " " . $ligne['PRENOM_RESA'] . "</p>";
-                        echo "<p>Mail de contacte: " . $ligne['MAIL_RESA'] . "</p>";
-                        echo "<p>Immatriculation enregistrer: " . $ligne['IMMATRICULATION_RESA'] . "</p>";
-                        echo "<p>Nombre de places réservées: " . $ligne['NBR_RESA'] . "</p>";
-                        if ($ligne['INFO_RESA'] != "") {
-                            echo "<p>Informations: " . $ligne['INFO_RESA'] . "</p>";
-                        }
-                        echo "<br/></section>";
-                    }
-
-                    if ($ok == false) {
-
-                        echo "<p class=\"text-center\">Pas de réservation pour le moment</p>";
-                        echo "<p class=\"text-right\"><a href=\"vide_grenier.php\">Voir le prochain vide grenier</a></p>";
-                    }
+//                    $select_resa = "SELECT * FROM reservation_vg JOIN videgrenier ON reservation_vg.id_vg = videgrenier.id_vg JOIN statuts ON reservation_vg.statu_resa = statuts.id_statuts WHERE id_util = :id";
+//                    $resultat_select = $base->prepare($select_resa);
+//                    $resultat_select->bindParam(':id', $_SESSION["id_util"]);
+//                    $resultat_select->execute();
+//
+//                    $ok = false;
+//
+//                    while ($ligne = $resultat_select->fetch()) {
+//
+//                        $ok = true;
+//
+//
+//                        echo "<section id=\"recapResa\">";
+//                        echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
+//                        echo "<p>Statut de la réservation: " . $ligne['LABEL_STATUTS'] . "</p>";
+//                        echo "<p>Date: " . $ligne['DATE_VG'] . " " . $ligne['HEURE_VG']  . "</p>";
+//                        echo "<p>Adresse: " . $ligne['ADDRESSE_VG'] . "</p>";
+//                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_RESA'] . " " . $ligne['PRENOM_RESA'] . "</p>";
+//                        echo "<p>Mail de contacte: " . $ligne['MAIL_RESA'] . "</p>";
+//                        echo "<p>Immatriculation enregistrer: " . $ligne['IMMATRICULATION_RESA'] . "</p>";
+//                        echo "<p>Nombre de places réservées: " . $ligne['NBR_RESA'] . "</p>";
+//                        if ($ligne['INFO_RESA'] != "") {
+//                            echo "<p>Informations: " . $ligne['INFO_RESA'] . "</p>";
+//                        }
+//                        echo "<br/></section>";
+//                    }
+//
+//                    if ($ok == false) {
+//
+//                        echo "<p class=\"text-center\">Pas de réservation pour le moment</p>";
+//                        echo "<p class=\"text-right\"><a href=\"vide_grenier.php\">Voir le prochain vide grenier</a></p>";
+//                    }
                 } catch (Exception $e) {
 
                     die('Erreur : ' . $e->getMessage());
@@ -160,18 +160,18 @@ if (isset($_SESSION["id_util"])) {
                         <label for="nom">Nom: </label>
                         <input type="text" class="form-control" name="nom" id="nom" value="<?php echo $nom ?>" placeholder="Dupont">
                     </div>
-                    <div class="form-group">
-                        <label for="prenom">Prénom: </label>
-                        <input type="text" class="form-control" name="prenom" id="prenom" value="<?php echo $prenom ?>" placeholder="Jean">
-                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label for="prenom">Prénom: </label>-->
+<!--                        <input type="text" class="form-control" name="prenom" id="prenom" value="--><?php //echo $prenom ?><!--" placeholder="Jean">-->
+<!--                    </div>-->
                     <div class="form-group">
                         <label for="tel">Tel.: </label>
                         <input type="text" class="form-control" name="tel" id="tel" value="<?php echo $telephone ?>" placeholder="0XXXXXXXXX">
                     </div>
-                    <div class="form-group">
-                        <label for="description">Une déscription à partager? : </label>
-                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum..."><?php echo $description ?></textarea>
-                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label for="description">Une déscription à partager? : </label>-->
+<!--                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum...">--><?php //echo $description ?><!--</textarea>-->
+<!--                    </div>-->
                     <div class="form-group">
                         <p>(*)Champs obligatoires pour modifier le profil</p>
                     </div>
