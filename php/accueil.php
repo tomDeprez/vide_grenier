@@ -14,11 +14,22 @@ session_start();
 
 <body>
     <?php
-    include 'inc_header.php';
+        include 'inc_header.php';
+
+        $erreurLogin = $_GET['erreur_login'] ?? '';
+        if($erreurLogin == 1)
+        {
+            echo '<section class="boxSite text-center">
+                    <h2>Erreur, tout les champs ne sont pas remplie</h2>
+                  </section>';
+        }
+        else
+        {
+
     ?>
 
     <section id="bienvenu" class="boxSite text-center">
-    
+
     <h1>Bienvenu sur le site du CIL de la Gravière!</h1>
     <h2>Prochainement, nos actualités seront affichées ici!</h2>
     </section>
@@ -26,6 +37,7 @@ session_start();
 
 
     <?php
+        }
     include 'inc_footer.php';
     ?>
 

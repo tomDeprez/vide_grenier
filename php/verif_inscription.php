@@ -1,7 +1,13 @@
 <?php
 session_start();
-// On test seulement les champs obligatoires
-if ($_POST['mail'] != "" && $_POST['password'] !="") {
+// Test des variables si existe
+
+$valueMail = $_POST['mail'] ?? '';
+$valueNom = $_POST['nom'] ?? '';
+$valueTel = $_POST['tel'] ?? '';
+$valueMdp = $_POST['password'] ?? '';
+
+if ($valueMail != "" && $valueMdp !="" && $valueTel && $valueNom) {
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +32,9 @@ if ($_POST['mail'] != "" && $_POST['password'] !="") {
     try {
         include 'inc_bdd.php';
 
-        // Test compte existent 
-        $mail = htmlspecialchars($_POST['mail']);
+        // Test compte existent
+
+        $mail = htmlspecialchars($valueMail);
 
         $select_util =  "SELECT * FROM utilisateur WHERE EMAIL_UTIL = :doublon";
 
@@ -49,12 +56,6 @@ if ($_POST['mail'] != "" && $_POST['password'] !="") {
 
             header("Location:inscription.php?erreur_inscription=" . urlencode("*Cette adresse e-mail est déjà utilisée"));
         } else {
-
-            // Test des chaines vide non obligatoires
-            $valueNom = $_POST['nom'] ?? '';
-            $valueTel = $_POST['tel'] ?? '';
-            $valueMail = $_POST['mail'] ?? '';
-            $valueMdp = $_POST['password'] ?? '';
 
             $insert_util = "INSERT INTO utilisateur (NOM_UTIL, TEL_UTIL, EMAIL_UTIL, MDP_UTIL, ID_ROL) VALUES (:nom, :tel, :mail, :mdp, 1)";
             $resultat_insert = $base->prepare($insert_util);
@@ -111,6 +112,8 @@ if ($_POST['mail'] != "" && $_POST['password'] !="") {
 
 } else {
 
-    header("Location:accueil.php");
+
+
+    header("Location:accueil.php?erreur_login=1");
 }
 ?>
