@@ -29,7 +29,7 @@ if ($_POST['mail'] != "" && $_POST['password'] !="") {
         // Test compte existent 
         $mail = htmlspecialchars($_POST['mail']);
 
-        $select_util =  "SELECT * FROM utilisateur WHERE mail_util = :doublon";
+        $select_util =  "SELECT * FROM utilisateur WHERE EMAIL_UTIL = :doublon";
 
         $resultat_select = $base->prepare($select_util);
 
@@ -51,78 +51,36 @@ if ($_POST['mail'] != "" && $_POST['password'] !="") {
         } else {
 
             // Test des chaines vide non obligatoires
-            if ($_POST['nom'] == "") {
+            $valueNom = $_POST['nom'] ?? '';
+            $valueTel = $_POST['tel'] ?? '';
+            $valueMail = $_POST['mail'] ?? '';
+            $valueMdp = $_POST['password'] ?? '';
 
-                $tempNom = "";
-                $valueNom = "";
-            } else {
-
-                $tempNom = ", nom_util";
-                $valueNom = ", :nom";
-            }
-
-            if ($_POST['prenom'] == "") {
-
-                $tempPrenom = "";
-                $valuePrenom = "";
-            } else {
-
-                $tempPrenom = ", prenom_util";
-                $valuePrenom = ", :prenom";
-            }
-
-            if ($_POST['tel'] == "") {
-
-                $tempTel = "";
-                $valueTel = "";
-            } else {
-
-                $tempTel = ", tel_util";
-                $valueTel = ", :tel";
-            }
-
-            if ($_POST['description'] == "") {
-
-                $tempDesc = "";
-                $valueDesc = "";
-            } else {
-
-                $tempDesc = ", desc_util";
-                $valueDesc = ", :descr";
-            }
-
-            $insert_util = "INSERT INTO utilisateur (mail_util, mdp_util $tempNom $tempPrenom $tempTel $tempDesc) VALUES (:mail, :mdp $valueNom $valuePrenom $valueTel $valueDesc )";
+            $insert_util = "INSERT INTO utilisateur (NOM_UTIL, TEL_UTIL, EMAIL_UTIL, MDP_UTIL, ID_ROL) VALUES (:nom, :tel, :mail, :mdp, 1)";
             $resultat_insert = $base->prepare($insert_util);
 
+            if($valueMail !== '')
+            {
+                $resultat_insert->bindParam(':mail', $valueMail);
+            }
 
-            $resultat_insert->bindParam(':mail', $mail);
-            $password = htmlspecialchars($_POST['password']);
-            $resultat_insert->bindParam(':mdp', $password);
+            if($valueMdp !== '')
+            {
+                $password = htmlspecialchars($valueMdp);
+                $resultat_insert->bindParam(':mdp', $password);
+            }
 
-            if ($_POST['nom'] != "") {
-
-                $nom = htmlspecialchars($_POST['nom']);
+            if($valueNom !== '')
+            {
+                $nom = htmlspecialchars($valueNom);
                 $resultat_insert->bindParam(':nom', $nom);
             }
 
-            if ($_POST['prenom'] != "") {
-
-                $prenom = htmlspecialchars($_POST['prenom']);
-                $resultat_insert->bindParam(':prenom', $prenom);
-            }
-
-            if ($_POST['tel'] != "") {
-
-                $tel = htmlspecialchars($_POST['tel']);
+            if($valueTel !== '')
+            {
+                $tel = htmlspecialchars($valueTel);
                 $resultat_insert->bindParam(':tel', $tel);
             }
-
-            if ($_POST['description'] != "") {
-
-                $description = htmlspecialchars($_POST['description']);
-                $resultat_insert->bindParam(':descr', $description);
-            }
-
             $resultat_insert->execute();
             echo "<section id=\"inscriptionValidée\" class=\"boxSite\">Votre inscription est validée!<br/>
         <a class=\"nav-link\" href=\"connexion.php\">Connexion</a></section>";

@@ -44,18 +44,18 @@ if (isset($_SESSION["id_util"])) {
                     <label for="nom">Nom: </label>
                     <input type="text" class="form-control" name="nom" id="nom" placeholder="Dupont">
                 </div>
-                <div class="form-group">
-                    <label for="prenom">Prénom: </label>
-                    <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean">
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="prenom">Prénom: </label>-->
+<!--                    <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean">-->
+<!--                </div>-->
                 <div class="form-group">
                     <label for="tel">Tel.: </label>
                     <input type="text" class="form-control" name="tel" id="tel" placeholder="0XXXXXXXXX">
                 </div>
-                <div class="form-group">
-                    <label for="description">Une déscription à partager? : </label>
-                    <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum..."></textarea>
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="description">Une déscription à partager? : </label>-->
+<!--                    <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum..."></textarea>-->
+<!--                </div>-->
                 <div class="form-group">
                     <!-- A l'inscription, le mail est ajouter par trigger dans la table 'mailing_list' -->
                     <p>En vous inscrivant, vous recevrez automatiquement les newsletter.</p>
