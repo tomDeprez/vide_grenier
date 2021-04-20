@@ -21,7 +21,7 @@ if (isset($_POST['login']) && isset($_POST['passConnec'])) {
         include 'inc_bdd.php';
         
         // Recherche des logins dans la bdd login_password
-        $select_login = 'SELECT * FROM utilisateur WHERE EMAIL_UTIL LIKE :mail AND mdp_util LIKE :pass';
+        $select_login = 'SELECT * FROM utilisateur ut INNER JOIN role ro ON ro.ID_ROL = ut.ID_ROL WHERE EMAIL_UTIL = :mail AND mdp_util = :pass';
         $resultat = $base->prepare($select_login);
 
         $log = htmlspecialchars($_POST['login']);
