@@ -62,7 +62,7 @@ if ($valueMail != "" && $valueMdp !="" && $valueTel && $valueNom) {
 
             if($valueMail !== '')
             {
-                $resultat_insert->bindParam(':mail', $valueMail);
+                $resultat_insert->bindParam(':mail', $mail);
             }
 
             if($valueMdp !== '')
@@ -83,6 +83,14 @@ if ($valueMail != "" && $valueMdp !="" && $valueTel && $valueNom) {
                 $resultat_insert->bindParam(':tel', $tel);
             }
             $resultat_insert->execute();
+
+            $insert_util_mailing = "CALL inscriptionMailing(:mail)";
+
+            $insertToBdd = $base->prepare($insert_util_mailing);
+
+            $insertToBdd->bindParam(':mail', $mail);
+            $insertToBdd->execute();
+
             echo "<section id=\"inscriptionValidée\" class=\"boxSite\">Votre inscription est validée!<br/>
         <a class=\"nav-link\" href=\"connexion.php\">Connexion</a></section>";
         }
