@@ -29,14 +29,38 @@ if (isset($_SESSION["id_util"]) && $_POST['mail'] != "") {
 
             while ($ligne = $resultat_select->fetch()) {
 
-                $mail = htmlspecialchars($_POST['mail']);
-                $oldPassword = htmlspecialchars($_POST['old_password']);
-                $newPassword = htmlspecialchars($_POST['new_password']);
-                $repPassword = htmlspecialchars($_POST['repeat_password']);
-                $nom = htmlspecialchars($_POST['nom']);
-                $prenom = htmlspecialchars($_POST['prenom']);
-                $tel = htmlspecialchars($_POST['tel']);
-                $description = htmlspecialchars($_POST['description']);
+                $mail = "";
+                $oldPassword = "";
+                $newPassword = "";
+                $repPassword = "";
+                $nom = "";
+                $prenom = "";
+                $tel = "";
+                $description = "";
+                if (isset($_POST['mail'])) {
+                    $mail = htmlspecialchars($_POST['mail']);
+                }
+                if (isset($_POST['old_password'])) {
+                    $oldPassword = htmlspecialchars($_POST['old_password']);
+                }
+                if (isset($_POST['new_password'])) {
+                    $newPassword = htmlspecialchars($_POST['new_password']);
+                }
+                if (isset($_POST['repeat_password'])) {
+                    $repPassword = htmlspecialchars($_POST['repeat_password']);
+                }
+                if (isset($_POST['nom'])) {
+                    $nom = htmlspecialchars($_POST['nom']);
+                }
+                if (isset($_POST['prenom'])) {
+                    $prenom = htmlspecialchars($_POST['prenom']);
+                }
+                if (isset($_POST['tel'])) {
+                    $tel = htmlspecialchars($_POST['tel']);
+                }
+                if (isset($_POST['description'])) {
+                    $description = htmlspecialchars($_POST['description']);
+                }
 
                 if (($oldPassword != "" && ($oldPassword != $ligne['MDP_UTIL'] || $newPassword !=  $repPassword)) || $mail == "") {
 
