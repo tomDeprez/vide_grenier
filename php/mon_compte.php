@@ -90,38 +90,38 @@ if (isset($_SESSION["id_util"])) {
                     }
 
                     // Rescherche et affiche les résa faites
-//                    $select_resa = "SELECT * FROM reservation_vg JOIN videgrenier ON reservation_vg.id_vg = videgrenier.id_vg JOIN statuts ON reservation_vg.statu_resa = statuts.id_statuts WHERE id_util = :id";
-//                    $resultat_select = $base->prepare($select_resa);
-//                    $resultat_select->bindParam(':id', $_SESSION["id_util"]);
-//                    $resultat_select->execute();
-//
-//                    $ok = false;
-//
-//                    while ($ligne = $resultat_select->fetch()) {
-//
-//                        $ok = true;
-//
-//
-//                        echo "<section id=\"recapResa\">";
+                    $select_resa = "SELECT * FROM reservation r JOIN videgrenier ON r.id_vg = videgrenier.id_vg JOIN exposant e on r.ID_RES = e.ID_RES JOIN videgrenier v on r.ID_VG = v.ID_VG JOIN attestationhonneur a on e.ID_AH = a.ID_AH WHERE ID_UTIL = :id";
+                    $resultat_select = $base->prepare($select_resa);
+                    $resultat_select->bindParam(':id', $_SESSION["id_util"]);
+                    $resultat_select->execute();
+
+                    $ok = false;
+
+                    while ($ligne = $resultat_select->fetch()) {
+                        $ok = true;
+
+
+                        echo "<section id=\"recapResa\">";
 //                        echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
-//                        echo "<p>Statut de la réservation: " . $ligne['LABEL_STATUTS'] . "</p>";
+                        echo "<p>Statut de la réservation: " . $ligne['STATUTRESERVATION_RES'] . "</p>";
 //                        echo "<p>Date: " . $ligne['DATE_VG'] . " " . $ligne['HEURE_VG']  . "</p>";
+                        echo "<p>Date: " . $ligne['DATE_VG'] . "</p>";
 //                        echo "<p>Adresse: " . $ligne['ADDRESSE_VG'] . "</p>";
-//                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_RESA'] . " " . $ligne['PRENOM_RESA'] . "</p>";
-//                        echo "<p>Mail de contacte: " . $ligne['MAIL_RESA'] . "</p>";
-//                        echo "<p>Immatriculation enregistrer: " . $ligne['IMMATRICULATION_RESA'] . "</p>";
-//                        echo "<p>Nombre de places réservées: " . $ligne['NBR_RESA'] . "</p>";
-//                        if ($ligne['INFO_RESA'] != "") {
-//                            echo "<p>Informations: " . $ligne['INFO_RESA'] . "</p>";
-//                        }
-//                        echo "<br/></section>";
-//                    }
-//
-//                    if ($ok == false) {
-//
-//                        echo "<p class=\"text-center\">Pas de réservation pour le moment</p>";
-//                        echo "<p class=\"text-right\"><a href=\"vide_grenier.php\">Voir le prochain vide grenier</a></p>";
-//                    }
+                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_EXP'] . " " . $ligne['PRENOM_EXP'] . "</p>";
+                        echo "<p>Mail de contacte: " . $ligne['EMAIL_EXP'] . "</p>";
+                        echo "<p>Immatriculation enregistrer: " . $ligne['NUMPLAQIMM_AH'] . "</p>";
+                        echo "<p>Nombre de places réservées: " . $ligne['NBREEMPLRESERVE_RES'] . "</p>";
+                        if ($ligne['COMMENT_EXP'] != "") {
+                            echo "<p>Informations: " . $ligne['COMMENT_EXP'] . "</p>";
+                        }
+                        echo "<br/></section>";
+                    }
+
+                    if ($ok == false) {
+
+                        echo "<p class=\"text-center\">Pas de réservation pour le moment</p>";
+                        echo "<p class=\"text-right\"><a href=\"vide_grenier.php\">Voir le prochain vide grenier</a></p>";
+                    }
                 } catch (Exception $e) {
 
                     die('Erreur : ' . $e->getMessage());

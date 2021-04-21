@@ -30,12 +30,12 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
         while ($ligne = $resultat->fetch()) {
 
-            $label = $ligne['LABEL_VG'];
+//            $label = $ligne['LABEL_VG'];
             $date = $ligne['DATE_VG'];
-            $heure = $ligne['HEURE_VG'];
-            $addresse = $ligne['ADDRESSE_VG'];
-            $nbrRestant = $ligne['NBR_RESTANT_VG'];
-            $prixPlace = $ligne['PRIX_EMPLACEMENTS'];
+//            $heure = $ligne['HEURE_VG'];
+//            $addresse = $ligne['ADDRESSE_VG'];
+            $nbrRestant = $ligne['NBREEMPLINDISPO_VG'];
+            $prixPlace = $ligne['PRIXEMPL_VG'];
         }
     } catch (Exception $e) {
 
@@ -50,9 +50,10 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
     <section id="infoResa" class="boxSite">
         <h3>Réservation: </h3>
-        <h3><?php echo $label ?></h3>
-        <p>Quand? le <?php echo $date ?>, <?php echo $heure ?></p>
-        <p>Où? <?php echo $addresse ?></p>
+<!--        <h3>--><?php //echo $label ?><!--</h3>-->
+<!--        <p>Quand? le --><?php //echo $date ?><!--, --><?php //echo $heure ?><!--</p>-->
+        <p>Quand? le <?php echo $date ?></p>
+<!--        <p>Où? --><?php //echo $addresse ?><!--</p>-->
         <p>Plus que <?php echo $nbrRestant ?> places disponibles.</p>
     </section>
 
