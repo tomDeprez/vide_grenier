@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3309
--- Généré le :  mar. 20 avr. 2021 à 10:21
--- Version du serveur :  10.4.10-MariaDB
--- Version de PHP :  7.3.12
+-- Hôte : 127.0.0.1:3306
+-- Généré le : mer. 21 avr. 2021 à 08:23
+-- Version du serveur :  5.7.31
+-- Version de PHP : 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `vide_grenier`
+-- Base de données : `vide_grenier3`
 --
 
 DELIMITER $$
@@ -59,13 +58,20 @@ CREATE TABLE IF NOT EXISTS `attestationhonneur` (
   `DATENAIS_AH` date NOT NULL,
   `DEPTNAIS_AH` decimal(8,0) NOT NULL,
   `VILLENAIS_AH` text NOT NULL,
-  `NUMCNI_AH` decimal(8,0) NOT NULL,
+  `NUMCNI_AH` decimal(13,0) NOT NULL,
   `DATEDELIVRCNI_AH` date NOT NULL,
   `EMETCNI_AH` text NOT NULL,
-  `NUMPLAQIMM_AH` text DEFAULT NULL,
+  `NUMPLAQIMM_AH` text,
   PRIMARY KEY (`ID_AH`),
-  KEY `FK_IMPLIQUER` (`ID_HOROD`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `ID_HOROD` (`ID_HOROD`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `attestationhonneur`
+--
+
+INSERT INTO `attestationhonneur` (`ID_AH`, `ID_HOROD`, `DATENAIS_AH`, `DEPTNAIS_AH`, `VILLENAIS_AH`, `NUMCNI_AH`, `DATEDELIVRCNI_AH`, `EMETCNI_AH`, `NUMPLAQIMM_AH`) VALUES
+(111111, 1111111, '1980-10-01', '69', 'Lyon', '200769180525', '2010-11-02', 'Préfecture du Rhône', 'AAA-000-AA');
 
 -- --------------------------------------------------------
 
@@ -84,14 +90,21 @@ CREATE TABLE IF NOT EXISTS `exposant` (
   `ADR_EXP` text NOT NULL,
   `CP_EXP` decimal(8,0) NOT NULL,
   `VILLE_EXP` text NOT NULL,
-  `TEL_EXP` decimal(8,0) NOT NULL,
+  `TEL_EXP` decimal(10,0) NOT NULL,
   `EMAIL_EXP` text NOT NULL,
-  `COMMENT_EXP` text DEFAULT NULL,
+  `COMMENT_EXP` text,
   PRIMARY KEY (`ID_EXP`),
-  KEY `FK_DEVENIR` (`ID_UTIL`),
-  KEY `FK_FAIRE` (`ID_RES`),
-  KEY `FK_FOURNIR` (`ID_AH`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `ID_RES` (`ID_RES`),
+  KEY `ID_AH` (`ID_AH`),
+  KEY `ID_UTIL` (`ID_UTIL`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `exposant`
+--
+
+INSERT INTO `exposant` (`ID_EXP`, `ID_RES`, `ID_AH`, `ID_UTIL`, `NOM_EXP`, `PRENOM_EXP`, `ADR_EXP`, `CP_EXP`, `VILLE_EXP`, `TEL_EXP`, `EMAIL_EXP`, `COMMENT_EXP`) VALUES
+(111, 1111, 111111, 1, 'Dupont', 'Paul', '15 rue Colombe', '69007', 'Lyon', '621345456', 'pauldupont@gmail.com', 'Hello la CIL');
 
 -- --------------------------------------------------------
 
@@ -106,7 +119,14 @@ CREATE TABLE IF NOT EXISTS `horodatage` (
   `DATE_HOROD` date NOT NULL,
   `HEURE_HOROD` time NOT NULL,
   PRIMARY KEY (`ID_HOROD`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `horodatage`
+--
+
+INSERT INTO `horodatage` (`ID_HOROD`, `IP_HOROD`, `DATE_HOROD`, `HEURE_HOROD`) VALUES
+(1111111, '172.16.254.1', '2019-03-15', '22:21:20');
 
 -- --------------------------------------------------------
 
@@ -119,14 +139,7 @@ CREATE TABLE IF NOT EXISTS `mailing_list` (
   `ID_ML` int(11) NOT NULL AUTO_INCREMENT,
   `MAIL_ML` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID_ML`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `mailing_list`
---
-
-INSERT INTO `mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
-(2, 'tom@gotmail.fr');
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -143,8 +156,15 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `STATUTRESERVATION_RES` text NOT NULL,
   `NUMEMPLATTRIBUE_RES` decimal(8,0) NOT NULL,
   PRIMARY KEY (`ID_RES`),
-  KEY `FK_CORRESPONDRE` (`ID_VG`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `ID_VG` (`ID_VG`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO `reservation` (`ID_RES`, `ID_VG`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `STATUTRESERVATION_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
+(1111, 11111, '3', 'en ligne', 'validée', '0');
 
 -- --------------------------------------------------------
 
@@ -159,14 +179,15 @@ CREATE TABLE IF NOT EXISTS `role` (
   `MEMB_ROL` text NOT NULL,
   `VISIT_ROL` text NOT NULL,
   PRIMARY KEY (`ID_ROL`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `role`
 --
 
 INSERT INTO `role` (`ID_ROL`, `ADMIN_ROL`, `MEMB_ROL`, `VISIT_ROL`) VALUES
-(1, 'admin', 'admin', 'admin');
+(0, 'administrateur', 'null', 'null'),
+(1, 'null', 'null', 'visiteur');
 
 -- --------------------------------------------------------
 
@@ -183,16 +204,16 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `EMAIL_UTIL` text NOT NULL,
   `TEL_UTIL` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`ID_UTIL`),
-  KEY `FK_AVOIR` (`ID_ROL`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  KEY `ID_ROL` (`ID_ROL`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`ID_UTIL`, `ID_ROL`, `NOM_UTIL`, `MDP_UTIL`, `EMAIL_UTIL`, `TEL_UTIL`) VALUES
-(1, 1, 'root', 'rootroot', 'root@hotmail.fr', '66168214'),
-(2, 1, 'tom', '12345678', 'tomtom@hotmail.com', '661654899');
+(1, 0, 'admin', '000000', 't@gmail.com', '606060606'),
+(2, 1, 'TEST', '000000', 'kiki@gmail.com', '606060606');
 
 -- --------------------------------------------------------
 
@@ -211,7 +232,44 @@ CREATE TABLE IF NOT EXISTS `videgrenier` (
   `NBREEMPLRESTREEL_VG` decimal(8,0) NOT NULL,
   `NBREPARTICIP_VG` decimal(8,0) NOT NULL,
   PRIMARY KEY (`ID_VG`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `videgrenier`
+--
+
+INSERT INTO `videgrenier` (`ID_VG`, `DATE_VG`, `PRIXEMPL_VG`, `NBREEMPLINIT_VG`, `NBREEMPLINDISPO_VG`, `NOMBRE_D_EMPLACEMENTS_RESTANTS_TEMPORAIRES_`, `NBREEMPLRESTREEL_VG`, `NBREPARTICIP_VG`) VALUES
+(11111, '2020-07-25', 10.00, '150', '30', '117', '147', '1');
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `attestationhonneur`
+--
+ALTER TABLE `attestationhonneur`
+  ADD CONSTRAINT `attestationhonneur_ibfk_1` FOREIGN KEY (`ID_HOROD`) REFERENCES `horodatage` (`ID_HOROD`);
+
+--
+-- Contraintes pour la table `exposant`
+--
+ALTER TABLE `exposant`
+  ADD CONSTRAINT `exposant_ibfk_1` FOREIGN KEY (`ID_RES`) REFERENCES `reservation` (`ID_RES`),
+  ADD CONSTRAINT `exposant_ibfk_2` FOREIGN KEY (`ID_AH`) REFERENCES `attestationhonneur` (`ID_AH`),
+  ADD CONSTRAINT `exposant_ibfk_3` FOREIGN KEY (`ID_UTIL`) REFERENCES `utilisateur` (`ID_UTIL`);
+
+--
+-- Contraintes pour la table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`ID_VG`) REFERENCES `videgrenier` (`ID_VG`);
+
+--
+-- Contraintes pour la table `utilisateur`
+--
+ALTER TABLE `utilisateur`
+  ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`ID_ROL`) REFERENCES `role` (`ID_ROL`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

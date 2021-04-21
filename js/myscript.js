@@ -16,15 +16,12 @@ $(document).ready(function () {
         var password = $("#password").val();
         var repPassword = $("#repeat_password").val();
         var nom = $("#nom").val();
-        var prenom = $("#prenom").val();
+        // var prenom = $("#prenom").val();
         var telephone = $("#tel").val();
-        var description = $("#description").val();
-
+        // var description = $("#description").val();
         
         if (login == "" || password == "" || repPassword == "") {
-
             $("#erreurInscription").html("*Veuillez remplir tous les champs requis");
-            
             return false;
         } else if (login.length > 50 || regMail.test(login) == false){
 
@@ -38,19 +35,23 @@ $(document).ready(function () {
 
             $("#erreurInscription").html("*Veuillez vérifier votre nom.");
             return false;
-        } else if ( prenom != "" && ((prenom.length > 50) || regNomPrenom.test(prenom) == false)){
-
-            $("#erreurInscription").html("*Veuillez vérifier votre  prénom.");
-            return false;
-        } else if (telephone != "" && ((telephone.length > 10) || regTel.test(telephone) == false)){
+        }
+        // else if ( prenom != "" && ((prenom.length > 50) || regNomPrenom.test(prenom) == false)){
+        //
+        //     $("#erreurInscription").html("*Veuillez vérifier votre  prénom.");
+        //     return false;
+        // }
+        else if (telephone != "" && ((telephone.length > 10) || regTel.test(telephone) == false)){
 
             $("#erreurInscription").html("*Veuillez vérifier votre numéros de téléphone.");
             return false;
-        } else if (description != "" && description.length > 280){
-
-            $("#erreurInscription").html("*Veuillez raccourcir votre déscription ("+description.length+"/280 caractères maximum).");
-            return false;
-        } else {
+        }
+        // else if (description != "" && description.length > 280){
+        //
+        //     $("#erreurInscription").html("*Veuillez raccourcir votre déscription ("+description.length+"/280 caractères maximum).");
+        //     return false;
+        // }
+        else {
 
             $("#erreurLogin").html("");
             return true;
