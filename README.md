@@ -1,3 +1,5 @@
+<h1>Déployer le projet:</h1></br>
+</br>
 1 - Mettre le projet dans un votre espace de travail</br>
 2 - Importer la BDD ./sql/vide_grenierV0.2.2.sql</br>
 3 - Editer les paramètres de connexion à la BDD dans ./php/inc_bdd.php ligne 3 :</br>
