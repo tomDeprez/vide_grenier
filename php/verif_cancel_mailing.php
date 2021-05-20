@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-if ($_POST['mailInscription'] != "") {
+if ($_POST['mailCancel'] != "") {
 
 ?>
 <!DOCTYPE html>
@@ -27,6 +26,8 @@ if ($_POST['mailInscription'] != "") {
 
         // Test mailing existent 
         $mail = htmlspecialchars($_POST['mailCancel']);
+
+
 
         $select_mailing =  "SELECT * FROM mailing_list WHERE mail_ml = :mail";
 
