@@ -29,7 +29,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
         // Test réservation existent 
         $mail = htmlspecialchars($_POST['mail']);
 
-        $select_resa =  "SELECT * FROM reservation_vg WHERE mail_resa = :doublon AND id_vg = :id";
+        $select_resa =  "SELECT * FROM reservation JOIN exposant e on reservation.ID_RES = e.ID_RES WHERE EMAIL_EXP = :doublon AND id_vg = :id";
 
         $resultat_select = $base->prepare($select_resa);
 
@@ -63,8 +63,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $nbrEmplacement = htmlspecialchars($_POST['nbrEmplacement']);
 
 
-
-            $sql0 = "SELECT nbr_restant_vg FROM videgrenier WHERE id_vg = :id";
+            $sql0 = "SELECT NBREEMPLINDISPO_VG FROM videgrenier WHERE id_vg = :id";
 
             $resultat0 = $base->prepare($sql0);
             $resultat0->bindParam(':id', $id_vg);
@@ -79,7 +78,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             }
   
 
-            $update_place = "UPDATE videgrenier SET nbr_restant_vg = :restant WHERE id_vg = :id";
+            $update_place = "UPDATE videgrenier SET NBREEMPLINDISPO_VG = :restant WHERE id_vg = :id";
             $resultat_update = $base->prepare($update_place);
 
             $resultat_update->bindParam(':id', $id_vg);
@@ -106,11 +105,32 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
                 $valueInfo = ", :info";
             }
 
-            $insert_resa = "INSERT INTO reservation_vg (ID_VG, ID_UTIL, NOM_RESA, PRENOM_RESA, MAIL_RESA, ADDRESSE_RESA, CODE_POSTAL_RESA, VILLE_RESA, PORTABLE_RESA, CNI_RESA, DELIVRE_CNI_RESA, PAR_CNI_RESA $tempImma, NBR_RESA $tempInfo ) VALUES (:id_vg, :id, :nom, :prenom, :mail, :addresse, :postal, :ville, :portable, :cni, :delivrer, :par $valueImma, :nbr $valueInfo )";
+            $type = 'En ligne';
+            $statut = 'En attente';
+            $numPlace = 1;
+
+
+
+            $insert_resa = "INSERT INTO reservation (ID_VG, TYPEPAIEMENT_RES, STATUTRESERVATION_RES, NUMEMPLATTRIBUE_RES) VALUES (:id_vg, :type, :statut, :numPlace)";
             $resultat_insert = $base->prepare($insert_resa);
 
+
+            // poura récupérer l'id de la réservation passé
+            $base->beginTransaction();
+
             $resultat_insert->bindParam(':id_vg', $id_vg);
+            $resultat_insert->bindParam(':type', $type);
+            $resultat_insert->bindParam(':numPlace', $numPlace);
+            $resultat_insert->bindParam(':statut', $statut);
+
+            $resultat_insert->execute();
+            $id_reservation = $base->lastInsertId();
+            $base->commit();
+
+            $insert_exposant = "INSERT INTO exposant (ID_RES, ID_AH, ID_UTIL, NOM_EXP, PRENOM_EXP, ADR_EXP, CP_EXP, VILLE_EXP, TEL_EXP, EMAIL_EXP, COMMENT_EXP) VALUES (:idReservation)";
+
             $resultat_insert->bindParam(':id', $_SESSION["id_util"]);
+            $resultat_insert->bindParam(':idReservation', $id_reservation);
             $resultat_insert->bindParam(':nom', $nom);
             $resultat_insert->bindParam(':prenom', $prenom);
             $resultat_insert->bindParam(':mail', $mail);
@@ -135,7 +155,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
                 $resultat_insert->bindParam(':info', $remarque);
             }
 
-            $resultat_insert->execute();
+
             echo "<section id=\"resaValidée\" class=\"boxSite\">Votre réservation est validée!<br/>
         <a class=\"nav-link\" href=\"mon_compte.php\">Voir mon compte</a></section>";
         }

@@ -22,6 +22,16 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
     try {
         include 'inc_bdd.php';
 
+        $userRole = 'SELECT * FROM utilisateur ut INNER JOIN role ro ON ro.ID_ROL = ut.ID_ROL WHERE ut.ID_UTIL = :idUser';
+        $resultatUserRole = $base->prepare($userRole);
+
+        $idUser = htmlspecialchars($_POST['id_util']);
+        $resultatUserRole->execute(array('idUser' => $idUser));
+
+        var_dump($resultatUserRole->fetch());
+        die();
+
+
         $select_vg = 'SELECT * FROM videgrenier WHERE ID_VG = :id';
         $resultat = $base->prepare($select_vg);
 
@@ -77,15 +87,11 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             </div>
             <label for="addresse">*Adresse: </label>
             <input type="text" class="form-control" name="addresse" id="addresse" placeholder="4 avenus de l'exemple">
-            </div>
-            </div>
             <label for="postal">*Code Postal: </label>
             <input type="text" class="form-control" name="postal" id="postal" placeholder="XXXXX">
-            </div>
-            </div>
+
             <label for="ville">*Ville: </label>
             <input type="text" class="form-control" name="ville" id="ville" placeholder="Saint exemple">
-            </div>
             <div class="form-group">
                 <label for="portable">*Portable: </label>
                 <input type="text" class="form-control" name="portable" id="portable" placeholder="0XXXXXXXXX">
