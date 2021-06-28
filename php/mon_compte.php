@@ -2,95 +2,80 @@
 session_start();
 
 if (isset($_SESSION["id_util"])) {
+    ?>
+<!DOCTYPE html>
+<html lang="fr">
 
-?>
-    <!DOCTYPE html>
-    <html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte | CIL de la Gravière</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/monstyle.css">
+</head>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mon Compte | CIL de la Gravière</title>
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
-        <link rel="stylesheet" href="../css/monstyle.css">
-    </head>
-
-    <body>
-        <?php
+<body>
+    <?php
         include 'inc_header.php';
-        // echo $_SESSION['admin'];
-        ?>
+    // echo $_SESSION['admin'];?>
 
-        <main id="monCompte">
-            <?php
+    <main id="monCompte">
+        <?php
 
             // Test Admin
             if ($_SESSION['admin'] == 1) {
-            ?>
-                <section class="boxSite">
+                ?>
+        <section class="boxSite">
 
-                    <h2>Gestion Administrateur:</h2>
-                    <div id="lienAdmin"><a href="panneau_admin.php" class="bouton">Gestion</a></div>
+            <h2>Gestion Administrateur:</h2>
+            <div id="lienAdmin"><a href="panneau_admin.php" class="bouton">Gestion</a></div>
 
-                </section>
+        </section>
 
-            <?php } ?>
+        <?php
+            } ?>
 
-            <section id="récap" class="boxSite">
-                <h3>Réservation:</h3>
+        <section id="récap" class="boxSite">
+            <h3>Réservation:</h3>
 
 
-                <?php
+            <?php
 
 
                 try {
                     include 'inc_bdd.php';
 
-                    // Recherche des valeurs du compte 
+                    // Recherche des valeurs du compte
                     $select_utilisateur = 'SELECT * FROM utilisateur WHERE id_util = :id_util';
                     $resultat = $base->prepare($select_utilisateur);
                     $resultat->bindParam(':id_util', $_SESSION["id_util"]);
                     $resultat->execute();
 
-                    while ($ligne = $resultat->fetch()) {
-
-                        $mail = $ligne['EMAIL_UTIL'];
-
-                        if ($ligne['NOM_UTIL'] != "") {
-
-                            $nom = $ligne['NOM_UTIL'];
-                        } else {
-
-                            $nom = "";
-                        }
-
-//                        if ($ligne['PRENOM_UTIL'] != "") {
-//
-//                            $prenom = $ligne['PRENOM_UTIL'];
-//                        } else {
-//
-//                            $prenom = "";
-//                        }
-
-                        if ($ligne['TEL_UTIL'] != "") {
-
-                            $telephone = $ligne['TEL_UTIL'];
-                        } else {
-
-                            $telephone = "";
-                        }
-
-//                        if ($ligne['DESC_UTIL'] != "") {
-//
-//                            $description = $ligne['DESC_UTIL'];
-//                        } else {
-//
-//                            $description = "";
-//                        }
+                    $user = $resultat->fetch();
+                    $mail = $user['EMAIL_UTIL'];
+                    if ($user['NOM_UTIL'] != "") {
+                        $nom = $user['NOM_UTIL'];
+                    } else {
+                        $nom = "";
                     }
+                    // if ($user['PRENOM_UTIL'] != "") {
+                    //     $prenom = $user['PRENOM_UTIL'];
+                    // } else {
+                    //     $prenom = "";
+                    // }
+                    if ($user['TEL_UTIL'] != "") {
+                        $telephone = $user['TEL_UTIL'];
+                    } else {
+                        $telephone = "";
+                    }
+                    // if ($user['DESC_UTIL'] != "") {
+                    //     $description = $user['DESC_UTIL'];
+                    // } else {
+                    //     $description = "";
+                    // }
 
                     // Rescherche et affiche les résa faites
-                    $select_resa = "SELECT * FROM reservation r JOIN videgrenier ON r.id_vg = videgrenier.id_vg JOIN exposant e on r.ID_RES = e.ID_RES JOIN videgrenier v on r.ID_VG = v.ID_VG JOIN attestationhonneur a on e.ID_AH = a.ID_AH WHERE ID_UTIL = :id";
+                    $select_resa = "SELECT * FROM reservation r JOIN videgrenier ON r.id_vg = videgrenier.id_vg JOIN exposant e on r.ID_RES = e.ID_RES JOIN attestationhonneur a on e.ID_AH = a.ID_AH WHERE ID_UTIL = :id";
                     $resultat_select = $base->prepare($select_resa);
                     $resultat_select->bindParam(':id', $_SESSION["id_util"]);
                     $resultat_select->execute();
@@ -99,8 +84,6 @@ if (isset($_SESSION["id_util"])) {
 
                     while ($ligne = $resultat_select->fetch()) {
                         $ok = true;
-
-
                         echo "<section id=\"recapResa\">";
 //                        echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
                         echo "<p>Statut de la réservation: " . $ligne['STATUTRESERVATION_RES'] . "</p>";
@@ -118,98 +101,95 @@ if (isset($_SESSION["id_util"])) {
                     }
 
                     if ($ok == false) {
-
                         echo "<p class=\"text-center\">Pas de réservation pour le moment</p>";
                         echo "<p class=\"text-right\"><a href=\"vide_grenier.php\">Voir le prochain vide grenier</a></p>";
                     }
                 } catch (Exception $e) {
-
                     die('Erreur : ' . $e->getMessage());
                 } finally {
-
                     $base = null; //fermeture de la connexion
-                }
-
-                ?>
+                } ?>
 
 
 
-            </section>
+        </section>
 
-            <!-- On créer le form avec les valeurs par défaut du compte -->
-            <section id="update" class="boxSite">
-                <h3>Modifier Profile</h3>
-                <form method="post" action="update_inscription.php" id="updateDB">
-                    <div class="form-group">
-                        <label for="mail">*Mail: </label>
-                        <input type="text" class="form-control" name="mail" id="mail" value="<?php echo $mail ?>" placeholder="exemple@mail.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="old_password">Ancien Mot de passe: </label>
-                        <input type="password" class="form-control" name="old_password" id="old_password">
-                    </div>
-                    <div class="form-group">
-                        <label for="new_password">Nouveau Mot de passe: </label>
-                        <input type="password" class="form-control" name="new_password" id="new_password">
-                    </div>
-                    <div class="form-group">
-                        <label for="repeat_password">Répeter Nouveau Mot de passe: </label>
-                        <input type="password" class="form-control" name="repeat_password" id="repeat_password">
-                    </div>
-                    <div class="form-group">
-                        <label for="nom">Nom: </label>
-                        <input type="text" class="form-control" name="nom" id="nom" value="<?php echo $nom ?>" placeholder="Dupont">
-                    </div>
-<!--                    <div class="form-group">-->
-<!--                        <label for="prenom">Prénom: </label>-->
-<!--                        <input type="text" class="form-control" name="prenom" id="prenom" value="--><?php //echo $prenom ?><!--" placeholder="Jean">-->
-<!--                    </div>-->
-                    <div class="form-group">
-                        <label for="tel">Tel.: </label>
-                        <input type="text" class="form-control" name="tel" id="tel" value="<?php echo $telephone ?>" placeholder="0XXXXXXXXX">
-                    </div>
-<!--                    <div class="form-group">-->
-<!--                        <label for="description">Une déscription à partager? : </label>-->
-<!--                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum...">--><?php //echo $description ?><!--</textarea>-->
-<!--                    </div>-->
-                    <div class="form-group">
-                        <p>(*)Champs obligatoires pour modifier le profil</p>
-                    </div>
-                    <input class="bouton" type="submit" value="Valider" id="subInscription">
+        <!-- On créer le form avec les valeurs par défaut du compte -->
+        <section id="update" class="boxSite">
+            <h3>Modifier Profile</h3>
+            <form method="post" action="update_inscription.php" id="updateDB">
+                <div class="form-group">
+                    <label for="mail">*Mail: </label>
+                    <input type="text" class="form-control" name="mail" id="mail"
+                        value="<?php echo $mail ?>"
+                        placeholder="exemple@mail.com">
+                </div>
+                <div class="form-group">
+                    <label for="old_password">Ancien Mot de passe: </label>
+                    <input type="password" class="form-control" name="old_password" id="old_password">
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Nouveau Mot de passe: </label>
+                    <input type="password" class="form-control" name="new_password" id="new_password">
+                </div>
+                <div class="form-group">
+                    <label for="repeat_password">Répeter Nouveau Mot de passe: </label>
+                    <input type="password" class="form-control" name="repeat_password" id="repeat_password">
+                </div>
+                <div class="form-group">
+                    <label for="nom">Nom: </label>
+                    <input type="text" class="form-control" name="nom" id="nom"
+                        value="<?php echo $nom ?>"
+                        placeholder="Dupont">
+                </div>
+                <!--                    <div class="form-group">-->
+                <!--                        <label for="prenom">Prénom: </label>-->
+                <!--                        <input type="text" class="form-control" name="prenom" id="prenom" value="--><?php //echo $prenom?>
+                <!--" placeholder="Jean">-->
+                <!--                    </div>-->
+                <div class="form-group">
+                    <label for="tel">Tel.: </label>
+                    <input type="text" class="form-control" name="tel" id="tel"
+                        value="<?php echo $telephone ?>"
+                        placeholder="0XXXXXXXXX">
+                </div>
+                <!--                    <div class="form-group">-->
+                <!--                        <label for="description">Une déscription à partager? : </label>-->
+                <!--                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum...">--><?php //echo $description?>
+                <!--</textarea>-->
+                <!--                    </div>-->
+                <div class="form-group">
+                    <p>(*)Champs obligatoires pour modifier le profil</p>
+                </div>
+                <input class="bouton" type="submit" value="Valider" id="subInscription">
 
-                    <div id="erreurUpdateInscription" class="red">
-                        <?php
+                <div id="erreurUpdateInscription" class="red">
+                    <?php
                         if (isset($_GET["erreur_update_inscription"])) {
-
                             echo $_GET["erreur_update_inscription"];
-                        }
-                        ?>
-                    </div>
-                </form>
+                        } ?>
+                </div>
+            </form>
 
-            </section>
-
-
-
-        </main>
+        </section>
 
 
 
-        <?php
-        include 'inc_footer.php';
-        ?>
+    </main>
 
-        <script src="../js/jquery-3.5.0.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
-        <script src="../js/myscript.js"></script>
-    </body>
 
-    </html>
+
+    <?php
+        include 'inc_footer.php'; ?>
+
+    <script src="../js/jquery-3.5.0.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/myscript.js"></script>
+</body>
+
+</html>
 
 <?php
-
 } else {
-
-    header("Location:accueil.php");
-}
-?>
+            header("Location:accueil.php");
+        }
