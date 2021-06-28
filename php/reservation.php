@@ -25,12 +25,11 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         $userRole = 'SELECT * FROM utilisateur ut INNER JOIN role ro ON ro.ID_ROL = ut.ID_ROL WHERE ut.ID_UTIL = :idUser';
         $resultatUserRole = $base->prepare($userRole);
 
-        $idUser = htmlspecialchars($_POST['id_util']);
+        $idUser = htmlspecialchars($_SESSION['id_util']);
         $resultatUserRole->execute(array('idUser' => $idUser));
 
-        var_dump($resultatUserRole->fetch());
-        die();
-
+//        var_dump($resultatUserRole->fetch());
+//        die();
 
         $select_vg = 'SELECT * FROM videgrenier WHERE ID_VG = :id';
         $resultat = $base->prepare($select_vg);
