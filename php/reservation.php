@@ -101,7 +101,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             </div>
             <div class="form-group">
                 <label for="dateCNI">*Délivrée le: </label>
-                <input type="text" class="form-control" name="dateCNI" id="dateCNI" placeholder="XXXX/XX/XX">
+                <input type="date" class="form-control" name="dateCNI" id="dateCNI" placeholder="XXXX/XX/XX">
             </div>
             <div class="form-group">
                 <label for="parCNI">*Délivrée par: </label>
