@@ -64,7 +64,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $nbrEmplacement = htmlspecialchars($_POST['nbrEmplacement']);
             $commentaire = htmlspecialchars($_POST['remarque']);
 
-
             $sql0 = "SELECT NBREEMPLINDISPO_VG FROM videgrenier WHERE id_vg = :id";
 
             $resultat0 = $base->prepare($sql0);
@@ -78,7 +77,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
 
                 header("Location:reservation.php?erreur_reservation=" . urlencode("*Désoler, plus de places disponibles"));
             }
-  
 
             $update_place = "UPDATE videgrenier SET NBREEMPLINDISPO_VG = :restant WHERE id_vg = :id";
             $resultat_update = $base->prepare($update_place);
