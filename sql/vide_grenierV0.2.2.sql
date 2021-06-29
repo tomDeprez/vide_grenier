@@ -245,6 +245,78 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`videgrenier` (
 INSERT INTO vide_grenier.videgrenier (`ID_VG`, `DATE_VG`, `PRIXEMPL_VG`, `NBREEMPLINIT_VG`, `NBREEMPLINDISPO_VG`, `NOMBRE_D_EMPLACEMENTS_RESTANTS_TEMPORAIRES_`, `NBREEMPLRESTREEL_VG`, `NBREPARTICIP_VG`) VALUES
 (11111, '2020-07-25', 10.00, '150', '30', '117', '147', '1');
 
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `planlegende`
+--
+
+DROP TABLE IF EXISTS vide_grenier.planlegende;
+CREATE TABLE IF NOT EXISTS vide_grenier.`planlegende` (
+  `ID_LEGENDE` int(11) NOT NULL AUTO_INCREMENT,
+  `LIBELLE_LEGENDE` text NOT NULL,
+  `COULEUR_LEGENDE` text NOT NULL,
+  PRIMARY KEY (`ID_LEGENDE`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `planlegende`
+--
+
+INSERT INTO vide_grenier.planlegende (`ID_LEGENDE`, `LIBELLE_LEGENDE`, `COULEUR_LEGENDE`) VALUES
+(1, 'Passage des visiteurs', '#663B03'),
+(2, 'Zébras', '#EEEE4F'),
+(3, ' Obstacle nature : arbre', '#30B232'),
+(4, 'Banc en pierre', '#D0D1D0'),
+(5, 'Voie privée', '#868686'),
+(6, 'Route', '#515151'),
+(7, ' Zone de déchargement', '#0CC9BD'),
+(8, 'Place débarquement (decharge voiture 1 place)', '#4E00CD'),
+(9, 'Place débarquement Place handicapée', '#A770FF'),
+(10, 'Emplacement indisponible', '#663B03'),
+(11, 'Emplacement de 2m', '#00FFD1'),
+(12, 'Emplacement de 3m', '#00FFD1'),
+(13, 'Emplacement de 4m', '#00FFD1');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `planposition`
+--
+
+DROP TABLE IF EXISTS vide_grenier.planposition;
+CREATE TABLE IF NOT EXISTS vide_grenier.`planposition` (
+  `ID_POSITION` varchar(20) NOT NULL,
+  `ID_PLANLEGENDE` int(11) NOT NULL,
+  `LARGEUR_POSITION` int(11) NOT NULL,
+  `CONTENT_POSITION` text DEFAULT NULL,
+  PRIMARY KEY (`ID_POSITION`),
+  KEY `ID_PLANLEGENDE` (`ID_PLANLEGENDE`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `planposition`
+--
+
+INSERT INTO vide_grenier.planposition (`ID_POSITION`, `ID_PLANLEGENDE`, `LARGEUR_POSITION`, `CONTENT_POSITION`) VALUES
+('l1c1', 6, 2, null),
+('l2c1', 6, 2, null),
+('l3c1', 6, 2, null),
+('l4c1', 6, 2, null),
+('l5c1', 6, 2, null),
+('l6c1', 6, 2, null),
+('l7c1', 6, 2, null),
+('l8c1', 6, 2, null),
+('l9c1', 6, 2, null),
+('l10c1', 6, 2, null),
+('l11c1', 6, 2, null),
+('l12c1', 6, 2, null),
+('l13c1', 6, 2, null),
+('l14c1', 6, 2, null),
+('l15c1', 6, 2, null),
+('l16c1', 6, 104, null);
+
 --
 -- Contraintes pour les tables déchargées
 --
@@ -254,6 +326,12 @@ INSERT INTO vide_grenier.videgrenier (`ID_VG`, `DATE_VG`, `PRIXEMPL_VG`, `NBREEM
 --
 ALTER TABLE vide_grenier.attestationhonneur
   ADD CONSTRAINT `attestationhonneur_ibfk_1` FOREIGN KEY (`ID_HOROD`) REFERENCES `horodatage` (`ID_HOROD`);
+
+--
+-- Contraintes pour la table `attestationhonneur`
+--
+ALTER TABLE vide_grenier.planposition
+  ADD CONSTRAINT `planposition_ibfk_1` FOREIGN KEY (`ID_PLANLEGENDE`) REFERENCES `planlegende` (`ID_LEGENDE`);
 
 --
 -- Contraintes pour la table `exposant`
