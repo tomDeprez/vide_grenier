@@ -22,37 +22,58 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
 
 
             <?php
-            if (isset($_GET["erreur_prog"])) {
-                echo "<div id=\"erreurUpdateVG\" class=\"red boxSite\">";
-                echo $_GET["erreur_prog"];
-                echo "</div>";
-            }
-
-            try {
-                include 'inc_bdd.php';
-
-                $select_vg =  "SELECT * FROM videgrenier";
-
-                $resultat_select = $base->prepare($select_vg);
-                $resultat_select->execute();
-
-
-                while ($ligne = $resultat_select->fetch()) {
-
-                    $table = "<table class=\"table table-striped\" id=\"" . $ligne['ID_VG'] . "\"><tr><th>Label</th><th>Date</th><th>Heure</th><th>Adresse</th><th>Emplacement</th><th>Emplacement Restant</th><th>Prix</th></tr>";
-                    $table .= "<tr><td>" . $ligne['LABEL_VG'] . "</td><td>" . $ligne['DATE_VG'] . "</td><td>" . $ligne['HEURE_VG'] . "</td><td>" . $ligne['ADDRESSE_VG'] . "</td><td>" . $ligne['NBR_EMPLACEMENTS'] . "</td><td>" . $ligne['NBR_RESTANT_VG'] . "</td><td>" . $ligne['PRIX_EMPLACEMENTS'] . "</td></tr>";
-                    $table .= "</table>";
-                    echo "<section class = \"boxSite\">" . $table;
-                    echo "<div><a href=\"admin_update_vg.php?idVG=" . $ligne['ID_VG'] . "\" class=\"bouton\">Modifier</a></div>";
-                    echo "</section>";
+                if (isset($_GET["erreur_prog"])) {
+                    echo "<div id=\"erreurUpdateVG\" class=\"red boxSite\">";
+                    echo $_GET["erreur_prog"];
+                    echo "</div>";
                 }
-            } catch (Exception $e) {
 
-                die('Erreur : ' . $e->getMessage());
-            } finally {
+                try {
+                    include 'inc_bdd.php';
 
-                $base = null; //fermeture de la connexion
-            }
+                    $select_vg =  "SELECT * FROM videgrenier";
+
+                    $resultat_select = $base->prepare($select_vg);
+                    $resultat_select->execute();
+
+                    $lignes = $resultat_select->fetchAll();
+
+            ?>
+                <section class="boxSite">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Emplacement initial</th>
+                                <th>Emplacement restant</th>
+                                <th>Prix</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php  foreach($lignes as $ligne): ?>
+                                <tr>
+                                    <td><?=$ligne['ID_VG'];?></td>
+                                    <td><?=$ligne['DATE_VG'];?></td>
+                                    <td><?=$ligne['NBREEMPLINIT_VG'];?></td>
+                                    <td><?=$ligne['NBREEMPLINDISPO_VG'];?></td>
+                                    <td><?=$ligne['PRIXEMPL_VG'];?></td>
+                                    <td><a href="admin_update_vg.php?idVG=<?=$ligne['ID_VG'];?>" class="bouton">Modifier</a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+
+                    </table>
+                </section>
+            <?php
+                } catch (Exception $e) {
+
+                    die('Erreur : ' . $e->getMessage());
+                } finally {
+
+                    $base = null; //fermeture de la connexion
+                }
             ?>
 
 
