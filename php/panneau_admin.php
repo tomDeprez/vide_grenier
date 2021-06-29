@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(isset($_SESSION['id_util']) && $_SESSION["admin"] == 1){
+if(isset($_SESSION['id_util']) && $_SESSION["admin"] == true){
 ?>
 <!DOCTYPE html>
 <html lang="fr">

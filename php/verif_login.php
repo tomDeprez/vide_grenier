@@ -29,12 +29,17 @@ if (isset($_POST['login']) && isset($_POST['passConnec'])) {
         $resultat->execute(array('mail' => $log, 'pass' => $mdp));
 
         $ok = false;
-   
+        $admin = false;
         while ($ligne = $resultat->fetch()) {
-
             $ok = true;
             $id = $ligne['ID_UTIL'];
-            $admin = $ligne['ADMIN_UTIL'];
+
+
+            if($ligne['ID_ROL'] == '2')
+                {
+                    $admin = true;
+                }
+
         }
 
         if ($ok) {

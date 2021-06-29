@@ -24,22 +24,22 @@ if (isset($_SESSION["id_util"]) && $_SESSION["admin"] == 1) {
 
             <form method="post" action="verif_prog_vg.php" id="progDB">
                 <h3>Programmation</h3>
+<!--                <div class="form-group">-->
+<!--                    <label for="label">*Nom du vide-grenier: </label>-->
+<!--                    <input type="text" class="form-control" name="label" id="label" placeholder="Vide-grenier annuel">-->
+<!--                </div>-->
                 <div class="form-group">
-                    <label for="label">*Nom du vide-grenier: </label>
-                    <input type="text" class="form-control" name="label" id="label" placeholder="Vide-grenier annuel">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" name="date" id="date" placeholder="XXXX/XX/XX">
                 </div>
-                <div class="form-group">
-                    <label for="date">*Date (format "XX/XX/XXXX"): </label>
-                    <input type="text" class="form-control" name="date" id="date" placeholder="XX/XX/XXXX">
-                </div>
-                <div class="form-group">
-                    <label for="heure">*Heure (format "de Xh à Xh"): </label>
-                    <input type="text" class="form-control" name="heure" id="heure" placeholder="de Xh à Xh">
-                </div>
-                <div class="form-group">
-                    <label for="addresse">*Adresse: </label>
-                    <input type="text" class="form-control" name="addresse" id="addresse" placeholder="Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110">
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="heure">Heure</label>-->
+<!--                    <input type="datetime-local" class="form-control" name="heure" id="heure" placeholder="de Xh à Xh">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="addresse">*Adresse: </label>-->
+<!--                    <input type="text" class="form-control" name="addresse" id="addresse" placeholder="Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110">-->
+<!--                </div>-->
                 <div class="form-group">
                     <label for="nombre">*Nombres d'emplacement: </label>
                     <input type="number" min="1" class="form-control" name="nombre" id="nombre">

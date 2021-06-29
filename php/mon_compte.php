@@ -23,7 +23,7 @@ if (isset($_SESSION["id_util"])) {
         <?php
 
             // Test Admin
-            if ($_SESSION['admin'] == 1) {
+            if ($_SESSION['admin'] == true) {
                 ?>
         <section class="boxSite">
 
