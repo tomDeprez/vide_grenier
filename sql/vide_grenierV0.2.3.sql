@@ -75,8 +75,9 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`attestationhonneur` (
 -- Déchargement des données de la table `attestationhonneur`
 --
 
-INSERT INTO vide_grenier.attestationhonneur (`ID_AH`, `ID_HOROD`, `DATENAIS_AH`, `DEPTNAIS_AH`, `VILLENAIS_AH`, `NUMCNI_AH`, `DATEDELIVRCNI_AH`, `EMETCNI_AH`, `NUMPLAQIMM_AH`) VALUES
-(111111, 1111111, '1980-10-01', '69', 'Lyon', '200769180525', '2010-11-02', 'Préfecture du Rhône', 'AAA-000-AA');
+INSERT INTO vide_grenier.`attestationhonneur` (`ID_AH`, `ID_HOROD`, `DATENAIS_AH`, `DEPTNAIS_AH`, `VILLENAIS_AH`, `NUMCNI_AH`, `DATEDELIVRCNI_AH`, `EMETCNI_AH`, `NUMPLAQIMM_AH`) VALUES
+(111111, 1111111, '1980-10-01', '69', 'Lyon', '200769180525', '2010-11-02', 'Préfecture du Rhône', 'AAA-000-AA'),
+(111112, 1111112, NULL, NULL, NULL, '3', '2021-06-30', 'Deprez', 'AB-254-DC');
 
 -- --------------------------------------------------------
 
@@ -104,6 +105,13 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`exposant` (
   KEY `ID_UTIL` (`ID_UTIL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `exposant`
+--
+
+INSERT INTO vide_grenier.`exposant` (`ID_EXP`, `ID_RES`, `ID_AH`, `ID_UTIL`, `NOM_EXP`, `PRENOM_EXP`, `ADR_EXP`, `CP_EXP`, `VILLE_EXP`, `TEL_EXP`, `EMAIL_EXP`, `COMMENT_EXP`) VALUES
+(1, 1, 111112, 1, 'deprez', 'tom', 'test 4', '38540', 'valencin', '0661682148', 'tom_deprez@hotmail.fr', '');
+
 -- --------------------------------------------------------
 
 --
@@ -125,7 +133,8 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`horodatage` (
 
 INSERT INTO vide_grenier.horodatage (`ID_HOROD`, `IP_HOROD`, `DATE_HOROD`, `HEURE_HOROD`) VALUES
 (1111111, '172.16.254.1', '2019-03-15', '22:21:20');
-
+INSERT INTO vide_grenier.horodatage (`ID_HOROD`, `IP_HOROD`, `DATE_HOROD`, `HEURE_HOROD`) VALUES
+(1111112, '192.168.0.1', '2021-06-10', '12:40:20');
 -- --------------------------------------------------------
 
 --
@@ -166,6 +175,13 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`reservation` (
   PRIMARY KEY (`ID_RES`),
   KEY `ID_VG` (`ID_VG`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `STATUTRESERVATION_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
+(1, 11111, '2', 'En ligne', 'En attente', '1');
 
 -- --------------------------------------------------------
 
