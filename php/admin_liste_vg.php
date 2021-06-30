@@ -31,13 +31,15 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
                 try {
                     include 'inc_bdd.php';
 
-                    $select_vg =  "SELECT * FROM videgrenier";
+                    $select_vg =  "SELECT *, COUNT(r.ID_RES) as nbParticipant FROM videgrenier LEFT JOIN reservation r on videgrenier.ID_VG = r.ID_VG GROUP BY videgrenier.ID_VG";
 
                     $resultat_select = $base->prepare($select_vg);
                     $resultat_select->execute();
 
                     $lignes = $resultat_select->fetchAll();
 
+//                    var_dump($lignes);
+//                    die();
             ?>
                 <section class="boxSite">
                     <table class="table table-striped">
@@ -48,22 +50,23 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
                                 <th>Emplacement initial</th>
                                 <th>Emplacement restant</th>
                                 <th>Prix</th>
+                                <th>Nombre de participant</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php  foreach($lignes as $ligne): ?>
+                            <?php foreach($lignes as $ligne): $nbParticipant = 0; ?>
                                 <tr>
-                                    <td><?=$ligne['ID_VG'];?></td>
+                                    <td><?=$ligne[0];?></td>
                                     <td><?=$ligne['DATE_VG'];?></td>
                                     <td><?=$ligne['NBREEMPLINIT_VG'];?></td>
                                     <td><?=$ligne['NBREEMPLINDISPO_VG'];?></td>
                                     <td><?=$ligne['PRIXEMPL_VG'];?></td>
-                                    <td><a href="admin_update_vg.php?idVG=<?=$ligne['ID_VG'];?>" class="bouton">Modifier</a></td>
+                                    <td><?= $nbParticipant = $ligne['nbParticipant'] != null ? $ligne['nbParticipant'] : $nbParticipant?></td>
+                                    <td><a href="admin_update_vg.php?idVG=<?=$ligne[0];?>" class="bouton">Modifier</a></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-
                     </table>
                 </section>
             <?php
