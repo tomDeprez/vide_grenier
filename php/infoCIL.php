@@ -18,7 +18,7 @@ session_start();
     ?>
 
     <main id="quiSommeNous" class="boxSite">
-        <img src="../images/logo.png" class="img-fluid" alt="Logo">
+        <img src="../images/logo2.png" class="img-fluid" alt="Logo">
         
         <h1 class="text-center">Qui sommes-nous ?</h1>
 

@@ -86,12 +86,11 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $resultat_update->execute();
 
             $type = 'En ligne';
-            $statut = 'En attente';
             $numPlace = 1;
 
 
 
-            $insert_resa = "INSERT INTO reservation (ID_VG, TYPEPAIEMENT_RES, STATUTRESERVATION_RES, NUMEMPLATTRIBUE_RES, NBREEMPLRESERVE_RES) VALUES (:id_vg, :type, :statut, :numPlace, :nbPlace)";
+            $insert_resa = "INSERT INTO reservation (ID_VG, TYPEPAIEMENT_RES, NUMEMPLATTRIBUE_RES, NBREEMPLRESERVE_RES) VALUES (:id_vg, :type, :numPlace, :nbPlace)";
             $resultat_insert = $base->prepare($insert_resa);
 
 
@@ -102,7 +101,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $resultat_insert->bindParam(':type', $type);
             $resultat_insert->bindParam(':numPlace', $numPlace);
             $resultat_insert->bindParam(':nbPlace', $nbrEmplacement);
-            $resultat_insert->bindParam(':statut', $statut);
 
             $resultat_insert->execute();
             $id_reservation = $base->lastInsertId();

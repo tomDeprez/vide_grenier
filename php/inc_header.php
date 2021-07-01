@@ -1,7 +1,7 @@
 <header id="en_tete">
 <div class="row">
     <div id="logo" class="col-md-4">
-    <a href="accueil.php"><img id="logoHead" src="../images/logo.png" class="img-fluid" alt="Logo"></a>
+    <a href="accueil.php"><img id="logoHead" src="../images/logo2.png" class="img-fluid" alt="Logo"></a>
     </div>
     <nav id="menu_nav" class="col-md-8">
         <ul class="nav nav-pills">

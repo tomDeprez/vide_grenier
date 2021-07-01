@@ -20,43 +20,32 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
         ?>
         <main id="listeUtil">
             <?php
-
             try {
                 include 'inc_bdd.php';
-
                 // Nbr utilisateurs pour pagination
                 $countUtil = "SELECT COUNT(*) FROM utilisateur";
-
                 $resultatCount = $base->prepare($countUtil);
-
                 $resultatCount->execute();
                 $nbrUtil = $resultatCount->fetchColumn();
                 $nbrPage = (int) ($nbrUtil / 25) + 1;
-
                 if (isset($_GET['page'])) {
-
                     $page = $_GET['page'];
                 } else {
-
                     $page = 1;
                 }
 
                 $nbrLigneBase = ($page - 1) * 3;
-
-
                 // Un admin ne peut voir les autres admin
-                $select_util =  "SELECT * FROM utilisateur WHERE ADMIN_UTIL IS NULL LIMIT $nbrLigneBase, 25";
-
+                $select_util =  "SELECT * FROM utilisateur u INNER JOIN role r ON r.ID_ROL = u.ID_ROL WHERE ADMIN_ROL IS NULL or ADMIN_ROL = 'null' LIMIT $nbrLigneBase, 25";
                 $resultat_select = $base->prepare($select_util);
                 $resultat_select->execute();
-
-                $table = "<table class=\"table table-striped\"><tr><th>Mail</th><th>Nom</th><th>Prenom</th><th>Telephone</th><th>Description</th><th class=\"text-center\">Supprimer Utilisateur</th></tr>";
-
-                while ($ligne = $resultat_select->fetch()) {
-
-                    $table .= "<tr><td>" . $ligne['MAIL_UTIL'] . "</td><td>" . $ligne['NOM_UTIL'] . "</td><td>" . $ligne['PRENOM_UTIL'] . "</td><td>" . $ligne['TEL_UTIL'] . "</td><td>" . $ligne['DESC_UTIL'] . "</td><td class=\"text-center\"><input type=\"radio\" id=\"" . $ligne['ID_UTIL'] . "\" name=\"choix\" value=\"" . $ligne['ID_UTIL'] . "\"></td></tr>";
+                $returnResult = $resultat_select->fetchAll();
+                $table = "<table class=\"table table-striped\"><tr><th>Mail</th><th>Nom</th><th>Prenom</th><th>Telephone</th><th>Rôle</th><th>Description</th><th class=\"text-center\">Supprimer Utilisateur</th></tr>";
+                foreach ($returnResult as $key => $ligne) {
+                    $role = "";
+                    $role = $ligne['VISIT_ROL'] != 'null' ? $ligne['VISIT_ROL'] : $ligne['MEMB_ROL'];
+                    $table .= "<tr><td>" . $ligne['EMAIL_UTIL'] . "</td><td>" . $ligne['NOM_UTIL'] . "</td><td>" . $ligne['PRENOM_UTIL'] . "</td><td>" . $ligne['TEL_UTIL'] . "</td><td>" . $role . "</td><td>" . $ligne['DESC_UTIL'] . "</td><td class=\"text-center\"><input type=\"radio\" id=\"" . $ligne['ID_UTIL'] . "\" name=\"choix\" value=\"" . $ligne['ID_UTIL'] . "\"></td></tr>";
                 }
-
                 $table .= "</table>";
                 echo "<section class = \"boxSite\">";
                 echo "<form method=\"POST\" action=\"admin_erase_util.php\" id=\"formSupp\">";
@@ -66,33 +55,23 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
 
 
                 echo "<section class=\"row\" id=\"suivantPrecedent\">";
-
                 if ($page != 1) {
-
                     echo "<div class=\"text-left col-md-6\"><a class=\"bouton\" href=\"admin_util.php?page=" . ($page - 1) . "\"><--</a></div>";
                 } else {
-
                     echo "<div class=\"text-left col-md-6\"></div>";
                 }
-
                 if ($page != $nbrPage) {
-
                     echo "<div class=\"text-right col-md-6\"><a class=\"bouton\" href=\"admin_util.php?page=" . ($page + 1) . "\">--></a></div>";
                 } else {
-
                     echo "<div class=\"text-right col-md-6\"></div>";
                 }
-
                 echo "</section>";
-
                 echo "<div id=\"erreurSupp\" class=\"red\">";
                 if (isset($_GET["erreur_supp"])) {
-
                     echo $_GET["erreur_supp"];
                 }
 
                 echo "</div>";
-
                 echo "</section>";
             } catch (Exception $e) {
 

@@ -58,21 +58,21 @@ if (isset($_SESSION["id_util"])) {
                     } else {
                         $nom = "";
                     }
-                    // if ($user['PRENOM_UTIL'] != "") {
-                    //     $prenom = $user['PRENOM_UTIL'];
-                    // } else {
-                    //     $prenom = "";
-                    // }
+                    if ($user['PRENOM_UTIL'] != "") {
+                        $prenom = $user['PRENOM_UTIL'];
+                    } else {
+                        $prenom = "";
+                    }
                     if ($user['TEL_UTIL'] != "") {
                         $telephone = $user['TEL_UTIL'];
                     } else {
                         $telephone = "";
                     }
-                    // if ($user['DESC_UTIL'] != "") {
-                    //     $description = $user['DESC_UTIL'];
-                    // } else {
-                    //     $description = "";
-                    // }
+                    if ($user['DESC_UTIL'] != "") {
+                        $description = $user['DESC_UTIL'];
+                    } else {
+                        $description = "";
+                    }
 
                     // Rescherche et affiche les résa faites
                     $select_resa = "SELECT * FROM reservation r JOIN videgrenier ON r.id_vg = videgrenier.id_vg JOIN exposant e on r.ID_RES = e.ID_RES JOIN attestationhonneur a on e.ID_AH = a.ID_AH WHERE ID_UTIL = :id";
@@ -142,22 +142,23 @@ if (isset($_SESSION["id_util"])) {
                         value="<?php echo $nom ?>"
                         placeholder="Dupont">
                 </div>
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="prenom">Prénom: </label>-->
-                <!--                        <input type="text" class="form-control" name="prenom" id="prenom" value="--><?php //echo $prenom?>
-                <!--" placeholder="Jean">-->
-                <!--                    </div>-->
+                <div class="form-group">
+                    <label for="prenom">Prénom: </label>
+                    <input type="text" class="form-control" name="prenom" id="prenom"
+                        value="<?php echo $prenom?>"
+                        placeholder="Jean">
+                </div>
                 <div class="form-group">
                     <label for="tel">Tel.: </label>
                     <input type="text" class="form-control" name="tel" id="tel"
                         value="<?php echo $telephone ?>"
                         placeholder="0XXXXXXXXX">
                 </div>
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="description">Une déscription à partager? : </label>-->
-                <!--                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum...">--><?php //echo $description?>
-                <!--</textarea>-->
-                <!--                    </div>-->
+                <div class="form-group">
+                    <label for="description">Une déscription à partager? : </label>
+                    <textarea name="description" id="description" cols="31" rows="5"
+                        placeholder="280 caractéres maximum..."><?php echo trim($description)?></textarea>
+                </div>
                 <div class="form-group">
                     <p>(*)Champs obligatoires pour modifier le profil</p>
                 </div>

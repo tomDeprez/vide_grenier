@@ -59,6 +59,7 @@ DELIMITER ;
 DROP TABLE IF EXISTS vide_grenier.attestationhonneur;
 CREATE TABLE IF NOT EXISTS vide_grenier.`attestationhonneur` (
   `ID_AH` int(11) NOT NULL AUTO_INCREMENT,
+  `ID_EXP` int(11) NOT NULL,
   `ID_HOROD` int(11) NOT NULL,
   `DATENAIS_AH` date DEFAULT NULL,
   `DEPTNAIS_AH` decimal(8,0) DEFAULT NULL,
@@ -101,8 +102,7 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`exposant` (
   `COMMENT_EXP` text,
   PRIMARY KEY (`ID_EXP`),
   KEY `ID_RES` (`ID_RES`),
-  KEY `ID_AH` (`ID_AH`),
-  KEY `ID_UTIL` (`ID_UTIL`)
+  KEY `ID_AH` (`ID_AH`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -170,8 +170,8 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`reservation` (
   `ID_VG` int(11) NOT NULL,
   `NBREEMPLRESERVE_RES` decimal(8,0) DEFAULT NULL,
   `TYPEPAIEMENT_RES` text DEFAULT NULL,
-  `STATUTRESERVATION_RES` text DEFAULT NULL,
   `NUMEMPLATTRIBUE_RES` decimal(8,0) DEFAULT NULL,
+  `STATU_RESA` INT(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ID_RES`),
   KEY `ID_VG` (`ID_VG`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -180,8 +180,8 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`reservation` (
 -- Déchargement des données de la table `reservation`
 --
 
-INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `STATUTRESERVATION_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
-(1, 11111, '2', 'En ligne', 'En attente', '1');
+INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
+(1, 11111, '2', 'En ligne', '1');
 
 -- --------------------------------------------------------
 
@@ -218,6 +218,8 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`utilisateur` (
   `ID_UTIL` int(11) NOT NULL AUTO_INCREMENT,
   `ID_ROL` int(11) NOT NULL,
   `NOM_UTIL` text NOT NULL,
+  `PRENOM_UTIL` VARCHAR(100) NOT NULL,
+  `DESC_UTIL` VARCHAR(280) NOT NULL,
   `MDP_UTIL` text NOT NULL,
   `EMAIL_UTIL` text NOT NULL,
   `TEL_UTIL` varchar(10) DEFAULT NULL,
@@ -333,6 +335,15 @@ INSERT INTO vide_grenier.planposition (`ID_POSITION`, `ID_PLANLEGENDE`, `LARGEUR
 ('l15c1', 6, 2, null),
 ('l16c1', 6, 104, null);
 
+
+DROP TABLE IF EXISTS vide_grenier.statuts;
+CREATE TABLE vide_grenier.`statuts` (
+  `ID_STATUS` INT NOT NULL AUTO_INCREMENT,
+  `LIBELLE_STATUS` VARCHAR(1000) NOT NULL,
+  PRIMARY KEY (`ID_STATUS`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+INSERT INTO vide_grenier.`statuts` (`ID_STATUS`, `LIBELLE_STATUS`) VALUES ('1', 'En attente'), ('2', 'Validé'), ('3', 'Refusé');
 --
 -- Contraintes pour les tables déchargées
 --
@@ -353,15 +364,14 @@ ALTER TABLE vide_grenier.planposition
 -- Contraintes pour la table `exposant`
 --
 ALTER TABLE vide_grenier.exposant
-  ADD CONSTRAINT `exposant_ibfk_1` FOREIGN KEY (`ID_RES`) REFERENCES `reservation` (`ID_RES`),
-  ADD CONSTRAINT `exposant_ibfk_2` FOREIGN KEY (`ID_AH`) REFERENCES `attestationhonneur` (`ID_AH`),
-  ADD CONSTRAINT `exposant_ibfk_3` FOREIGN KEY (`ID_UTIL`) REFERENCES `utilisateur` (`ID_UTIL`);
+  ADD CONSTRAINT `exposant_ibfk_1` FOREIGN KEY (`ID_UTIL`) REFERENCES `utilisateur` (`ID_UTIL`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `reservation`
 --
 ALTER TABLE vide_grenier.reservation
-  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`ID_VG`) REFERENCES `videgrenier` (`ID_VG`);
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`ID_RES`) REFERENCES `exposant` (`ID_RES`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`ID_VG`) REFERENCES `videgrenier` (`ID_VG`);
 
 --
 -- Contraintes pour la table `utilisateur`
