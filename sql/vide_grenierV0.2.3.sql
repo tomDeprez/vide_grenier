@@ -160,6 +160,17 @@ INSERT INTO vide_grenier.mailing_list (`ID_ML`, `MAIL_ML`) VALUES
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS vide_grenier.Placer;
+CREATE TABLE vide_grenier.Placer(
+    Id_Place int(11) NOT NULL  AUTO_INCREMENT,
+    Id_Reservation int(11),
+    Id_PlanPosition varchar(20),
+    PRIMARY KEY(Id_Place),
+    FOREIGN KEY(Id_Reservation) REFERENCES Reservation(ID_RES),
+    FOREIGN KEY(Id_PlanPosition) REFERENCES PlanPosition(ID_POSITION)
+);
+
+
 --
 -- Structure de la table `reservation`
 --
