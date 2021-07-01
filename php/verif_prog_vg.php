@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_POST['label'] != "" && $_POST['date'] != "" && $_POST['heure'] != "" && $_POST['addresse'] != "" && $_POST['nombre'] != "" && $_POST['prix'] != ""){
+if(isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_POST['date'] != "" && $_POST['nombre'] != "" && $_POST['prix'] != ""){
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -25,21 +25,21 @@ if(isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_POST['label'] != 
     try {
         include 'inc_bdd.php';
 
-        $label = htmlspecialchars($_POST['label']);
+//        $label = htmlspecialchars($_POST['label']);
         $date = htmlspecialchars($_POST['date']);
-        $heure = htmlspecialchars($_POST['heure']);
-        $addresse = htmlspecialchars($_POST['addresse']);
+//        $heure = htmlspecialchars($_POST['heure']);
+//        $addresse = htmlspecialchars($_POST['addresse']);
         $nombre = htmlspecialchars($_POST['nombre']);
         $prix = htmlspecialchars($_POST['prix']);
 
-        $insert_vg =  "INSERT INTO videgrenier (LABEL_VG, DATE_VG, HEURE_VG, ADDRESSE_VG, NBR_EMPLACEMENTS, NBR_RESTANT_VG, PRIX_EMPLACEMENTS) VALUES (:label, :date_vg, :heure, :addresse, :nbr, :nbr_restant, :prix)";
+        $insert_vg =  "INSERT INTO videgrenier (DATE_VG, PRIXEMPL_VG, NBREEMPLINIT_VG, NBREEMPLINDISPO_VG, NOMBRE_D_EMPLACEMENTS_RESTANTS_TEMPORAIRES_, NBREEMPLRESTREEL_VG, NBREPARTICIP_VG) VALUES (:date_vg, :prix, :nbr, :nbr_restant, :nbr, :nbr, 1)";
 
         $resultat_insert = $base->prepare($insert_vg);
 
-        $resultat_insert->bindParam(':label', $label);
+//        $resultat_insert->bindParam(':label', $label);
         $resultat_insert->bindParam(':date_vg', $date);
-        $resultat_insert->bindParam(':heure', $heure);
-        $resultat_insert->bindParam(':addresse', $addresse);
+//        $resultat_insert->bindParam(':heure', $heure);
+//        $resultat_insert->bindParam(':addresse', $addresse);
         $resultat_insert->bindParam(':nbr', $nombre);
         $resultat_insert->bindParam(':nbr_restant', $nombre);
         $resultat_insert->bindParam(':prix', $prix);

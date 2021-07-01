@@ -35,13 +35,13 @@ if (isset($_SESSION["id_util"]) && $_SESSION["admin"] == 1 && isset($_GET['idVG'
 
             while ($ligne = $resultat_select->fetch()) {
                 
-                $label = $ligne['LABEL_VG'];
+//                $label = $ligne['LABEL_VG'];
                 $date = $ligne['DATE_VG'];
-                $heure = $ligne['HEURE_VG'];
-                $addresse = $ligne['ADDRESSE_VG'];
-                $nombre = $ligne['NBR_EMPLACEMENTS'];
-                $restant = $ligne['NBR_RESTANT_VG'];
-                $prix = $ligne['PRIX_EMPLACEMENTS'];
+//                $heure = $ligne['HEURE_VG'];
+//                $addresse = $ligne['ADDRESSE_VG'];
+                $nombre = $ligne['NBREEMPLINIT_VG'];
+                $restant = $ligne['NBREEMPLINDISPO_VG'];
+                $prix = $ligne['PRIXEMPL_VG'];
             }
         } catch (Exception $e) {
 
@@ -56,22 +56,22 @@ if (isset($_SESSION["id_util"]) && $_SESSION["admin"] == 1 && isset($_GET['idVG'
 
             <form method="post" action="verif_update_vg.php?idVG=<?php echo $id_vg ?>" id="progDB">
                 <h3>Programmation</h3>
+<!--                <div class="form-group">-->
+<!--                    <label for="label">*Nom du vide-grenier: </label>-->
+<!--                    <input type="text" class="form-control" value="--><?php //echo $label ?><!--" name="label" id="label" placeholder="Vide-grenier annuel">-->
+<!--                </div>-->
                 <div class="form-group">
-                    <label for="label">*Nom du vide-grenier: </label>
-                    <input type="text" class="form-control" value="<?php echo $label ?>" name="label" id="label" placeholder="Vide-grenier annuel">
+                    <label for="date">*Date</label>
+                    <input type="date" class="form-control" value="<?php echo $date ?>" name="date" id="date" placeholder="XX/XX/XXXX">
                 </div>
-                <div class="form-group">
-                    <label for="date">*Date (format "XX/XX/XXXX"): </label>
-                    <input type="text" class="form-control" value="<?php echo $date ?>" name="date" id="date" placeholder="XX/XX/XXXX">
-                </div>
-                <div class="form-group">
-                    <label for="heure">*Heure (format "de Xh à Xh"): </label>
-                    <input type="text" class="form-control" value="<?php echo $heure ?>" name="heure" id="heure" placeholder="de Xh à Xh">
-                </div>
-                <div class="form-group">
-                    <label for="addresse">*Adresse: </label>
-                    <input type="text" class="form-control" value="<?php echo $addresse ?>" name="addresse" id="addresse" placeholder="Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110">
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="heure">*Heure (format "de Xh à Xh"): </label>-->
+<!--                    <input type="text" class="form-control" value="--><?php //echo $heure ?><!--" name="heure" id="heure" placeholder="de Xh à Xh">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="addresse">*Adresse: </label>-->
+<!--                    <input type="text" class="form-control" value="--><?php //echo $addresse ?><!--" name="addresse" id="addresse" placeholder="Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110">-->
+<!--                </div>-->
                 <div class="form-group">
                     <label for="nombre">*Nombres d'emplacement: </label>
                     <input type="number" min="1" class="form-control" value="<?php echo $nombre ?>" name="nombre" id="nombre">
