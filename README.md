@@ -9,5 +9,9 @@
 
 ## Connexion:
 1 - Login </br>
+           <strong>Utilisateur :</strong></br>
                 <strong>MAIL :</strong> t@gmail.com</br>
+                <strong>PASSWORD :</strong> 000000</br>
+           <strong>Administrateur :</strong></br>
+                <strong>MAIL :</strong> aa@gmail.com</br>
                 <strong>PASSWORD :</strong> 000000</br>
