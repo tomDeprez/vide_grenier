@@ -76,9 +76,8 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`attestationhonneur` (
 -- Déchargement des données de la table `attestationhonneur`
 --
 
-INSERT INTO vide_grenier.`attestationhonneur` (`ID_AH`, `ID_HOROD`, `DATENAIS_AH`, `DEPTNAIS_AH`, `VILLENAIS_AH`, `NUMCNI_AH`, `DATEDELIVRCNI_AH`, `EMETCNI_AH`, `NUMPLAQIMM_AH`) VALUES
-(111111, 1111111, '1980-10-01', '69', 'Lyon', '200769180525', '2010-11-02', 'Préfecture du Rhône', 'AAA-000-AA'),
-(111112, 1111112, NULL, NULL, NULL, '3', '2021-06-30', 'Deprez', 'AB-254-DC');
+INSERT INTO vide_grenier.`attestationhonneur` (`ID_AH`, `ID_EXP`, `ID_HOROD`, `DATENAIS_AH`, `DEPTNAIS_AH`, `VILLENAIS_AH`, `NUMCNI_AH`, `DATEDELIVRCNI_AH`, `EMETCNI_AH`, `NUMPLAQIMM_AH`) VALUES
+(111112, 1, 1111112, NULL, NULL, NULL, '3', '2021-06-30', 'Deprez', 'AB-254-DC');
 
 -- --------------------------------------------------------
 
