@@ -75,7 +75,7 @@ if (isset($_SESSION["id_util"])) {
                     }
 
                     // Rescherche et affiche les résa faites
-                    $select_resa = "SELECT * FROM reservation r JOIN videgrenier ON r.id_vg = videgrenier.id_vg JOIN exposant e on r.ID_RES = e.ID_RES JOIN attestationhonneur a on e.ID_AH = a.ID_AH WHERE ID_UTIL = :id";
+                    $select_resa = "SELECT * FROM reservation r JOIN videgrenier ON r.id_vg = videgrenier.id_vg JOIN exposant e on r.ID_EX = e.ID_EXP JOIN attestationhonneur a on e.ID_EXP = a.ID_EXP JOIN statuts s on s.ID_STATUS = r.STATU_RESA JOIN utilisateur u on u.ID_UTIL = e.ID_UTIL  WHERE u.ID_UTIL = :id";
                     $resultat_select = $base->prepare($select_resa);
                     $resultat_select->bindParam(':id', $_SESSION["id_util"]);
                     $resultat_select->execute();
@@ -86,12 +86,12 @@ if (isset($_SESSION["id_util"])) {
                         $ok = true;
                         echo "<section id=\"recapResa\">";
 //                        echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
-                        echo "<p>Statut de la réservation: " . $ligne['STATUTRESERVATION_RES'] . "</p>";
+                        echo "<p>Statut de la réservation: " . $ligne['LIBELLE_STATUS'] . "</p>";
 //                        echo "<p>Date: " . $ligne['DATE_VG'] . " " . $ligne['HEURE_VG']  . "</p>";
                         echo "<p>Date: " . $ligne['DATE_VG'] . "</p>";
 //                        echo "<p>Adresse: " . $ligne['ADDRESSE_VG'] . "</p>";
-                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_EXP'] . " " . $ligne['PRENOM_EXP'] . "</p>";
-                        echo "<p>Mail de contacte: " . $ligne['EMAIL_EXP'] . "</p>";
+                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_UTIL'] . " " . $ligne['PRENOM_UTIL'] . "</p>";
+                        echo "<p>Mail de contacte: " . $ligne['EMAIL_UTIL'] . "</p>";
                         echo "<p>Immatriculation enregistrer: " . $ligne['NUMPLAQIMM_AH'] . "</p>";
                         echo "<p>Nombre de places réservées: " . $ligne['NBREEMPLRESERVE_RES'] . "</p>";
                         if ($ligne['COMMENT_EXP'] != "") {

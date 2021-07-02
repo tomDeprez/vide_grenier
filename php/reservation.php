@@ -72,18 +72,18 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
         <form method="post" action="verif_resa.php?idVG=<?php echo $_GET['idVG']?>" id="resaDB">
 
-            <div class="form-group">
-                <label for="mail">*Mail: </label>
-                <input type="text" class="form-control" name="mail" id="mail" placeholder="exemple@mail.com">
-            </div>
-            <div class="form-group">
-                <label for="nom">*Nom: </label>
-                <input type="text" class="form-control" name="nom" id="nom" placeholder="Dupont">
-            </div>
-            <div class="form-group">
-                <label for="prenom">*Prénom: </label>
-                <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean">
-            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="mail">*Mail: </label>-->
+<!--                <input type="text" class="form-control" name="mail" id="mail" placeholder="exemple@mail.com">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="nom">*Nom: </label>-->
+<!--                <input type="text" class="form-control" name="nom" id="nom" placeholder="Dupont">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="prenom">*Prénom: </label>-->
+<!--                <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean">-->
+<!--            </div>-->
             <label for="addresse">*Adresse: </label>
             <input type="text" class="form-control" name="addresse" id="addresse" placeholder="4 avenus de l'exemple">
             <label for="postal">*Code Postal: </label>

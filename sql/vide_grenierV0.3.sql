@@ -89,28 +89,20 @@ INSERT INTO vide_grenier.`attestationhonneur` (`ID_AH`, `ID_HOROD`, `DATENAIS_AH
 DROP TABLE IF EXISTS vide_grenier.exposant;
 CREATE TABLE IF NOT EXISTS vide_grenier.`exposant` (
   `ID_EXP` int(11) NOT NULL AUTO_INCREMENT,
-  `ID_RES` int(11) NOT NULL,
-  `ID_AH` int(11) NOT NULL,
   `ID_UTIL` int(11) NOT NULL,
-  `NOM_EXP` text NOT NULL,
-  `PRENOM_EXP` text NOT NULL,
   `ADR_EXP` text NOT NULL,
   `CP_EXP` decimal(8,0) NOT NULL,
   `VILLE_EXP` text NOT NULL,
-  `TEL_EXP` varchar(10) NOT NULL,
-  `EMAIL_EXP` text NOT NULL,
   `COMMENT_EXP` text,
-  PRIMARY KEY (`ID_EXP`),
-  KEY `ID_RES` (`ID_RES`),
-  KEY `ID_AH` (`ID_AH`)
+  PRIMARY KEY (`ID_EXP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `exposant`
 --
 
-INSERT INTO vide_grenier.`exposant` (`ID_EXP`, `ID_RES`, `ID_AH`, `ID_UTIL`, `NOM_EXP`, `PRENOM_EXP`, `ADR_EXP`, `CP_EXP`, `VILLE_EXP`, `TEL_EXP`, `EMAIL_EXP`, `COMMENT_EXP`) VALUES
-(1, 1, 111112, 1, 'deprez', 'tom', 'test 4', '38540', 'valencin', '0661682148', 'tom_deprez@hotmail.fr', '');
+INSERT INTO vide_grenier.`exposant` (`ID_EXP`, `ID_UTIL`, `ADR_EXP`, `CP_EXP`, `VILLE_EXP`, `COMMENT_EXP`) VALUES
+(1, 1, 'test 4', '38540', 'valencin', '');
 
 -- --------------------------------------------------------
 
@@ -179,6 +171,7 @@ DROP TABLE IF EXISTS vide_grenier.reservation;
 CREATE TABLE IF NOT EXISTS vide_grenier.`reservation` (
   `ID_RES` int(11) NOT NULL AUTO_INCREMENT,
   `ID_VG` int(11) NOT NULL,
+  `ID_EX` int(11) NOT NULL,
   `NBREEMPLRESERVE_RES` decimal(8,0) DEFAULT NULL,
   `TYPEPAIEMENT_RES` text DEFAULT NULL,
   `NUMEMPLATTRIBUE_RES` decimal(8,0) DEFAULT NULL,
@@ -191,8 +184,8 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`reservation` (
 -- Déchargement des données de la table `reservation`
 --
 
-INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
-(1, 11111, '2', 'En ligne', '1');
+INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `ID_EX`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
+(1, 11111, 1, '2', 'En ligne', '1');
 
 -- --------------------------------------------------------
 
@@ -203,9 +196,7 @@ INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `NBREEMPLRESERVE_RES`
 DROP TABLE IF EXISTS vide_grenier.role;
 CREATE TABLE IF NOT EXISTS vide_grenier.`role` (
   `ID_ROL` int(11) NOT NULL AUTO_INCREMENT,
-  `ADMIN_ROL` text NOT NULL,
-  `MEMB_ROL` text NOT NULL,
-  `VISIT_ROL` text NOT NULL,
+  `Libelle_ROL` text NOT NULL,
   PRIMARY KEY (`ID_ROL`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
@@ -213,10 +204,10 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`role` (
 -- Déchargement des données de la table `role`
 --
 
-INSERT INTO vide_grenier.role (`ID_ROL`, `ADMIN_ROL`, `MEMB_ROL`, `VISIT_ROL`) VALUES
-(1, 'null', 'null', 'visiteur'),
-(2, 'administrateur', 'null', 'null'),
-(3, 'null', 'exposant', 'null');
+INSERT INTO vide_grenier.role (`ID_ROL`, `Libelle_ROL`) VALUES
+(1, 'visiteur'),
+(2, 'administrateur'),
+(3, 'exposant');
 
 -- --------------------------------------------------------
 
@@ -242,11 +233,11 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`utilisateur` (
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO vide_grenier.utilisateur (`ID_UTIL`, `ID_ROL`, `NOM_UTIL`, `MDP_UTIL`, `EMAIL_UTIL`, `TEL_UTIL`) VALUES
-(1, 1, 'TOTO', '000000', 't@gmail.com', '0606060606'),
-(4, 2, 'aa', '000000', 'aa@gmail.com', '0606060606'),
-(5, 1, 'bb', '000000', 'bb@gmail.com', '0606060606'),
-(6, 1, 'cc', '000000', 'cc@gmail.com', '0606060606');
+INSERT INTO vide_grenier.utilisateur (`ID_UTIL`, `ID_ROL`, `NOM_UTIL`, `PRENOM_UTIL`,`MDP_UTIL`, `EMAIL_UTIL`, `TEL_UTIL`) VALUES
+(1, 1, 'TOTO', 'Titi', '000000', 't@gmail.com', '0606060606'),
+(4, 2, 'aa', 'Pierre', '000000', 'aa@gmail.com', '0606060606'),
+(5, 1, 'bb', 'Paul','000000', 'bb@gmail.com', '0606060606'),
+(6, 1, 'cc', 'Tom','000000', 'cc@gmail.com', '0606060606');
 
 -- --------------------------------------------------------
 
@@ -586,7 +577,7 @@ ALTER TABLE vide_grenier.exposant
 -- Contraintes pour la table `reservation`
 --
 ALTER TABLE vide_grenier.reservation
-  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`ID_RES`) REFERENCES `exposant` (`ID_RES`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`ID_EX`) REFERENCES `exposant` (`ID_EXP`) ON DELETE CASCADE,
   ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`ID_VG`) REFERENCES `videgrenier` (`ID_VG`);
 
 --

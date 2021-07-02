@@ -1,7 +1,7 @@
 <?php 
 session_start();
 // On test toutes les données obligatoires
-if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" && $_POST['prenom'] !="" && $_POST['addresse'] !="" && $_POST['postal'] !="" && $_POST['ville'] !="" && $_POST['numCNI'] !="" && $_POST['dateCNI'] !="" && $_POST['parCNI'] !="" && $_POST['portable'] !="" && $_POST['nbrEmplacement'] !="") {
+if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !="" && $_POST['postal'] !="" && $_POST['ville'] !="" && $_POST['numCNI'] !="" && $_POST['dateCNI'] !="" && $_POST['parCNI'] !="" && $_POST['nbrEmplacement'] !="") {
 
 ?>
 <!DOCTYPE html>
@@ -26,10 +26,18 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
     try {
         include 'inc_bdd.php';
 
-        // Test réservation existent 
-        $mail = htmlspecialchars($_POST['mail']);
+        // Test réservation existent
 
-        $select_resa =  "SELECT * FROM reservation JOIN exposant e on reservation.ID_RES = e.ID_RES WHERE EMAIL_EXP = :doublon AND id_vg = :id";
+        $select_Util =  "SELECT * FROM utilisateur where ID_UTIL = :id_util";
+        $resultat_util = $base->prepare($select_Util);
+        $resultat_util->bindParam(':id_util', $_SESSION["id_util"]);
+
+        $resultat_util->execute();
+
+        $utilisateur = $resultat_util->fetch();
+        $mail = $utilisateur['EMAIL_UTIL'];
+
+        $select_resa =  "SELECT * FROM reservation JOIN exposant e on reservation.ID_EX = e.ID_EXP join utilisateur u on u.ID_UTIL = e.ID_UTIL WHERE u.EMAIL_UTIL = :doublon AND id_vg = :id";
 
         $resultat_select = $base->prepare($select_resa);
 
@@ -51,8 +59,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
         } else {
 
             $id_vg = $_GET['idVG'];
-            $nom = htmlspecialchars($_POST['nom']);
-            $prenom = htmlspecialchars($_POST['prenom']);
             $addresse = htmlspecialchars($_POST['addresse']);
             $postal = htmlspecialchars($_POST['postal']);
             $ville = htmlspecialchars($_POST['ville']);
@@ -60,7 +66,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $dateCNI = htmlspecialchars($_POST['dateCNI']);
             $parCNI = htmlspecialchars($_POST['parCNI']);
             $immatriculation = htmlspecialchars($_POST['immatriculation']);
-            $portable = htmlspecialchars($_POST['portable']);
             $nbrEmplacement = htmlspecialchars($_POST['nbrEmplacement']);
             $commentaire = htmlspecialchars($_POST['remarque']);
 
@@ -84,27 +89,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $resultat_update->bindParam(':id', $id_vg);
             $resultat_update->bindParam(':restant', $nbrPlaceRestantApresResa);
             $resultat_update->execute();
-
-            $type = 'En ligne';
-            $numPlace = 1;
-
-
-
-            $insert_resa = "INSERT INTO reservation (ID_VG, TYPEPAIEMENT_RES, NUMEMPLATTRIBUE_RES, NBREEMPLRESERVE_RES) VALUES (:id_vg, :type, :numPlace, :nbPlace)";
-            $resultat_insert = $base->prepare($insert_resa);
-
-
-            // poura récupérer l'id de la réservation passé
-            $base->beginTransaction();
-
-            $resultat_insert->bindParam(':id_vg', $id_vg);
-            $resultat_insert->bindParam(':type', $type);
-            $resultat_insert->bindParam(':numPlace', $numPlace);
-            $resultat_insert->bindParam(':nbPlace', $nbrEmplacement);
-
-            $resultat_insert->execute();
-            $id_reservation = $base->lastInsertId();
-            $base->commit();
 
             $insert_horodatage = "INSERT INTO horodatage (IP_HOROD, DATE_HOROD, HEURE_HOROD) VALUES (:ipHorod, :DateHorod, :HeureHorod)";
             $resultat_horodatage = $base->prepare($insert_horodatage);
@@ -131,13 +115,28 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $id_horodatage = $base->lastInsertId();
             $base->commit();
 
-            $insert_AttestationH = "INSERT INTO attestationhonneur (ID_HOROD, DATENAIS_AH, DEPTNAIS_AH, VILLENAIS_AH, NUMCNI_AH, DATEDELIVRCNI_AH, EMETCNI_AH, NUMPLAQIMM_AH) VALUES (:idH, null, null, null, :numCNI, :dateCNI, :parCNI, :immatriculation)";
+            $insert_exposant = "INSERT INTO exposant (ID_UTIL, ADR_EXP, CP_EXP, VILLE_EXP, COMMENT_EXP) VALUES (:id, :addresse, :postal, :ville, :commentaire)";
+            $result_exposant = $base->prepare($insert_exposant);
+            $base->beginTransaction();
+            $result_exposant->bindParam(':id', $_SESSION["id_util"]);
+            $result_exposant->bindParam(':addresse', $addresse);
+            $result_exposant->bindParam(':postal', $postal);
+            $result_exposant->bindParam(':ville', $ville);
+            $result_exposant->bindParam(':commentaire', $commentaire);
+
+            $result_exposant->execute();
+            $id_exposant = $base->lastInsertId();
+
+            $base->commit();
+
+            $insert_AttestationH = "INSERT INTO attestationhonneur (ID_HOROD, ID_EXP, DATENAIS_AH, DEPTNAIS_AH, VILLENAIS_AH, NUMCNI_AH, DATEDELIVRCNI_AH, EMETCNI_AH, NUMPLAQIMM_AH) VALUES (:idH, :id_exp, null, null, null, :numCNI, :dateCNI, :parCNI, :immatriculation)";
             $resultat_AttestationH = $base->prepare($insert_AttestationH);
 
             // poura récupérer l'id de l'attestation honneurs
             $base->beginTransaction();
 
             $resultat_AttestationH->bindParam(':idH', $id_horodatage);
+            $resultat_AttestationH->bindParam(':id_exp', $id_exposant);
             $resultat_AttestationH->bindParam(':numCNI', $numCNI);
             $resultat_AttestationH->bindParam(':dateCNI', $dateCNI);
             $resultat_AttestationH->bindParam(':parCNI', $parCNI);
@@ -147,40 +146,20 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $id_ah = $base->lastInsertId();
             $base->commit();
 
-            $insert_exposant = "INSERT INTO exposant (ID_RES, ID_AH, ID_UTIL, NOM_EXP, PRENOM_EXP, ADR_EXP, CP_EXP, VILLE_EXP, TEL_EXP, EMAIL_EXP, COMMENT_EXP) VALUES (:idReservation, :idAH, :id, :nom, :prenom, :addresse, :postal, :ville, :portable, :mail, :commentaire)";
-            $result_exposant = $base->prepare($insert_exposant);
 
-            $result_exposant->bindParam(':id', $_SESSION["id_util"]);
-            $result_exposant->bindParam(':idReservation', $id_reservation);
-            $result_exposant->bindParam(':idAH', $id_ah);
-            $result_exposant->bindParam(':nom', $nom);
-            $result_exposant->bindParam(':prenom', $prenom);
-            $result_exposant->bindParam(':mail', $mail);
-            $result_exposant->bindParam(':addresse', $addresse);
-            $result_exposant->bindParam(':postal', $postal);
-            $result_exposant->bindParam(':ville', $ville);
-//            $resultat_insert->bindParam(':cni', $numCNI);
-//            $resultat_insert->bindParam(':delivrer', $dateCNI);
-//            $result_exposant->bindParam(':par', $parCNI);
-            $result_exposant->bindParam(':portable', $portable);
-            $result_exposant->bindParam(':commentaire', $commentaire);
-//            $resultat_insert->bindParam(':nbr', $nbrEmplacement);
-//
-//
-//            var_dump($result_exposant);
-            $result_exposant->execute();
+            $type = 'En ligne';
+            $numPlace = 1;
 
-//            if ($_POST['immatriculation'] != "") {
-//
-//                $immatriculation = htmlspecialchars($_POST['immatriculation']);
-//                $resultat_insert->bindParam(':immatricul', $immatriculation);
-//            }
-//
-//            if ($_POST['remarque'] != "") {
-//
-//                $remarque = htmlspecialchars($_POST['remarque']);
-//                $resultat_insert->bindParam(':info', $remarque);
-//            }
+            $insert_resa = "INSERT INTO reservation (ID_VG, ID_EX, TYPEPAIEMENT_RES, NUMEMPLATTRIBUE_RES, NBREEMPLRESERVE_RES) VALUES (:id_vg, :id_exp, :type, :numPlace, :nbPlace)";
+            $resultat_resa = $base->prepare($insert_resa);
+
+            $resultat_resa->bindParam(':id_vg', $id_vg);
+            $resultat_resa->bindParam(':id_exp', $id_exposant);
+            $resultat_resa->bindParam(':type', $type);
+            $resultat_resa->bindParam(':numPlace', $numPlace);
+            $resultat_resa->bindParam(':nbPlace', $nbrEmplacement);
+
+            $resultat_resa->execute();
 
 
             echo "<section id=\"resaValidée\" class=\"boxSite\">Votre réservation est validée!<br/>
