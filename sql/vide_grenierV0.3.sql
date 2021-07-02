@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS vide_grenier.`reservation` (
 --
 
 INSERT INTO vide_grenier.`reservation` (`ID_RES`, `ID_VG`, `ID_EX`, `NBREEMPLRESERVE_RES`, `TYPEPAIEMENT_RES`, `NUMEMPLATTRIBUE_RES`) VALUES
-(1, 11111, 1, '2', 'En ligne', '1');
+(1, 11111, 1, '2', 'En ligne', 1);
 
 -- --------------------------------------------------------
 
@@ -549,7 +549,7 @@ CREATE TABLE vide_grenier.`statuts` (
   PRIMARY KEY (`ID_STATUS`)
   ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
-INSERT INTO vide_grenier.`statuts` (`ID_STATUS`, `LIBELLE_STATUS`) VALUES ('1', 'En attente'), ('2', 'Validé'), ('3', 'Refusé');
+INSERT INTO vide_grenier.`statuts` (`ID_STATUS`, `LIBELLE_STATUS`) VALUES (1, 'En attente'), (2, 'Validé'), (3, 'Refusé');
 --
 -- Contraintes pour les tables déchargées
 --
@@ -577,7 +577,8 @@ ALTER TABLE vide_grenier.exposant
 --
 ALTER TABLE vide_grenier.reservation
   ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`ID_EX`) REFERENCES `exposant` (`ID_EXP`) ON DELETE CASCADE,
-  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`ID_VG`) REFERENCES `videgrenier` (`ID_VG`);
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`ID_VG`) REFERENCES `videgrenier` (`ID_VG`),
+  ADD CONSTRAINT `reservation_ibfk_3` FOREIGN KEY (`STATU_RESA`) REFERENCES `statuts` (`ID_STATUS`);
 
 --
 -- Contraintes pour la table `utilisateur`
