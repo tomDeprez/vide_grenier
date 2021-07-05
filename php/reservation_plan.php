@@ -17,17 +17,24 @@ const LARGEURE_CASE = 1;
                 
                 $id_cellule = "l".$numLigne."c".$numColonne;
 
-                $select_position = 'SELECT * FROM planposition INNER JOIN planlegende ON planposition.ID_PLANLEGENDE = planlegende.ID_LEGENDE WHERE ID_POSITION = :id';
+                $select_position = 'SELECT * FROM planposition INNER JOIN planlegende ON planposition.ID_PLANLEGENDE = planlegende.ID_LEGENDE LEFT JOIN placer ON placer.Id_PlanPosition = planposition.ID_POSITION LEFT JOIN reservation ON reservation.ID_RES = placer.Id_Reservation WHERE ID_POSITION = :id';
                 $info_position = $base->prepare($select_position);
 
                 $info_position->bindParam(':id', $id_cellule);
                 $info_position->execute();
-                $tab_info_position = $info_position->fetch(); ?>
+                $tab_info_position = $info_position->fetch();?>
 
                 <td id="<?= $id_cellule ?>"data-toggle='tooltip' data-placement='top' style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" <?php echo $tab_info_position['ID_PLANLEGENDE'] == "11" || $tab_info_position['ID_PLANLEGENDE'] == "12" || $tab_info_position['ID_PLANLEGENDE'] == "13" ? "onclick='choisirEmplacement(this)' title='".$tab_info_position['LIBELLE_LEGENDE']." disponible'" : "title='".$tab_info_position['LIBELLE_LEGENDE']."'" ?> colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
-                    <?= $tab_info_position['CONTENT_POSITION'] ?>
-                </td>
-                
+                <?php if ($_GET['idVG'] == $tab_info_position['ID_VG']) { ?>
+                    <td id="reserved" style="background-color: #D63700" colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
+                        <?= $tab_info_position['CONTENT_POSITION'] ?>
+                    </td>
+                <?php } else { ?>
+                    <td id="<?= $id_cellule ?>" style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
+                        <?= $tab_info_position['CONTENT_POSITION'] ?>
+                    </td>
+                <?php } ?>
+
                 <?php $nbColonne = $numColonne + $tab_info_position['LARGEUR_POSITION'] - 1 ?>
             <?php endif ?>
         <?php endfor ?>
