@@ -36,14 +36,14 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
 
                 $nbrLigneBase = ($page - 1) * 3;
                 // Un admin ne peut voir les autres admin
-                $select_util =  "SELECT * FROM utilisateur u INNER JOIN role r ON r.ID_ROL = u.ID_ROL WHERE ADMIN_ROL IS NULL or ADMIN_ROL = 'null' LIMIT $nbrLigneBase, 25";
+                $select_util =  "SELECT * FROM utilisateur u INNER JOIN role r ON r.ID_ROL = u.ID_ROL WHERE u.ID_ROL != 2 LIMIT $nbrLigneBase, 25";
                 $resultat_select = $base->prepare($select_util);
                 $resultat_select->execute();
                 $returnResult = $resultat_select->fetchAll();
                 $table = "<table class=\"table table-striped\"><tr><th>Mail</th><th>Nom</th><th>Prenom</th><th>Telephone</th><th>Rôle</th><th>Description</th><th class=\"text-center\">Supprimer Utilisateur</th></tr>";
                 foreach ($returnResult as $key => $ligne) {
                     $role = "";
-                    $role = $ligne['VISIT_ROL'] != 'null' ? $ligne['VISIT_ROL'] : $ligne['MEMB_ROL'];
+                    $role = $ligne['Libelle_ROL'];
                     $table .= "<tr><td>" . $ligne['EMAIL_UTIL'] . "</td><td>" . $ligne['NOM_UTIL'] . "</td><td>" . $ligne['PRENOM_UTIL'] . "</td><td>" . $ligne['TEL_UTIL'] . "</td><td>" . $role . "</td><td>" . $ligne['DESC_UTIL'] . "</td><td class=\"text-center\"><input type=\"radio\" id=\"" . $ligne['ID_UTIL'] . "\" name=\"choix\" value=\"" . $ligne['ID_UTIL'] . "\"></td></tr>";
                 }
                 $table .= "</table>";
