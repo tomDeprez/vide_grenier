@@ -25,7 +25,7 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_POST["choix"] !=
             try {
                 include 'inc_bdd.php';
                 
-                $update_resa = "UPDATE reservation_vg SET statu_resa = :statu WHERE id_resa = :id";
+                $update_resa = "UPDATE reservation SET statu_resa = :statu WHERE id_res = :id";
                 $resultat_update = $base->prepare($update_resa);
                 $resultat_update->bindParam(':id', $_GET["id_resa"]);
                 $resultat_update->bindParam(':statu', $_POST["choix"]);

@@ -24,10 +24,10 @@ const LARGEURE_CASE = 1;
                 $info_position->execute();
                 $tab_info_position = $info_position->fetch(); ?>
 
-                <td id="<?= $id_cellule ?>" style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
+                <td id="<?= $id_cellule ?>"data-toggle='tooltip' data-placement='top' style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" <?php echo $tab_info_position['ID_PLANLEGENDE'] == "11" || $tab_info_position['ID_PLANLEGENDE'] == "12" || $tab_info_position['ID_PLANLEGENDE'] == "13" ? "onclick='choisirEmplacement(this)' title='".$tab_info_position['LIBELLE_LEGENDE']." disponible'" : "title='".$tab_info_position['LIBELLE_LEGENDE']."'" ?> colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
                     <?= $tab_info_position['CONTENT_POSITION'] ?>
                 </td>
-
+                
                 <?php $nbColonne = $numColonne + $tab_info_position['LARGEUR_POSITION'] - 1 ?>
             <?php endif ?>
         <?php endfor ?>

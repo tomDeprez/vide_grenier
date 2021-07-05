@@ -26,7 +26,13 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && isset($_GET["id_re
 
                 // liste des demande de VG en attente de validation ou d'annulation
                 $select_attente =  "SELECT * FROM reservation JOIN videgrenier ON reservation.id_vg = videgrenier.id_vg JOIN statuts ON reservation.statu_resa = statuts.ID_STATUS WHERE STATU_RESA = 1 AND ID_RES = :id_resa";
-
+                $select_attente = "SELECT * FROM reservation resa
+                INNER JOIN exposant ex ON ex.ID_RES = resa.ID_RES
+                INNER JOIN videgrenier vide ON resa.ID_VG = vide.ID_VG 
+                INNER JOIN statuts stat ON stat.ID_STATUS = resa.STATU_RESA 
+                INNER JOIN utilisateur util ON util.ID_UTIL = ex.ID_UTIL
+                INNER JOIN attestationhonneur att ON att.ID_EXP = ex.ID_EXP
+                WHERE STATU_RESA = 1 AND ex.ID_RES = :id_resa";
                 $resultat_select = $base->prepare($select_attente);
                 $id_resa = htmlspecialchars($_GET["id_resa"]);
                 $resultat_select->bindParam(':id_resa', $id_resa);
@@ -34,25 +40,22 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && isset($_GET["id_re
                 $ligne = $resultat_select->fetch();
                 echo "<section class = \"boxSite\">";
                 echo "<section id=\"recapResa\">";
-                echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
-                echo "<p>Statut de la réservation: " . $ligne['LABEL_STATUTS'] . "</p>";
-                echo "<p>Date: " . $ligne['DATE_VG'] . " " . $ligne['HEURE_VG']  . "</p>";
-                echo "<p>Adresse: " . $ligne['ADDRESSE_VG'] . "</p>";
-                echo "<p>Nom Prénom de réservation: " . $ligne['NOM_RESA'] . " " . $ligne['PRENOM_RESA'] . "</p>";
+                echo "<h4>" . $ligne['DATE_VG'] . "</h4><br/>";
+                echo "<p>Statut de la réservation: " . $ligne['LIBELLE_STATUS'] . "</p>";
+                echo "<p>Date: " . $ligne['DATE_VG'] . "</p>";
+                echo "<p>Adresse: " . $ligne['ADR_EXP'] . "</p>";
+                echo "<p>Nom Prénom de réservation: " . $ligne['NOM_UTIL'] . " " . $ligne['PRENOM_UTIL'] . "</p>";
 
-                echo "<p>N° Carte d'identiter: " . $ligne['CNI_RESA'] . "</p>";
-                echo "<p>Délivrer le: " . $ligne['DELIVRE_CNI_RESA'] . "</p>";
-                echo "<p>Délivrer par: " . $ligne['PAR_CNI_RESA'] . "</p>";
+                echo "<p>N° Carte d'identiter: " . $ligne['NUMCNI_AH'] . "</p>";
+                echo "<p>Délivrer le: " . $ligne['DATEDELIVRCNI_AH'] . "</p>";
+                echo "<p>Délivrer par: " . $ligne['EMETCNI_AH'] . "</p>";
 
-                echo "<p>Mail de contacte: " . $ligne['MAIL_RESA'] . "</p>";
-                echo "<p>Portable: " . $ligne['PORTABLE_RESA'] . "</p>";
-                if ($ligne['IMMATRICULATION_RESA'] != "") {
-                    echo "<p>Immatriculation enregistrer: " . $ligne['IMMATRICULATION_RESA'] . "</p>";
+                echo "<p>Mail de contacte: " . $ligne['EMAIL_UTIL'] . "</p>";
+                echo "<p>Portable: " . $ligne['TEL_EXP'] . "</p>";
+                if ($ligne['NUMPLAQIMM_AH'] != "") {
+                    echo "<p>Immatriculation enregistrer: " . $ligne['NUMPLAQIMM_AH'] . "</p>";
                 }
-                echo "<p>Nombre de places réservées: " . $ligne['NBR_RESA'] . "</p>";
-                if ($ligne['INFO_RESA'] != "") {
-                    echo "<p>Informations: " . $ligne['INFO_RESA'] . "</p>";
-                }
+                echo "<p>Nombre de places réservées: 1</p>";
                 echo "<br/></section>";
                 ////////////////////////////////////////////////////////////////
 

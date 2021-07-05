@@ -1,28 +1,7 @@
-<?php 
+<?php
 session_start();
 // On test toutes les données obligatoires
-if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !="" && $_POST['postal'] !="" && $_POST['ville'] !="" && $_POST['numCNI'] !="" && $_POST['dateCNI'] !="" && $_POST['parCNI'] !="" && $_POST['nbrEmplacement'] !="") {
-
-?>
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Réservation | CIL de la Gravière</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/monstyle.css">
-</head>
-
-<body>
-    <?php
-    include 'inc_header.php';
-    ?>
-
-
-    <?php
-
+if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !="" && $_POST['postal'] !="" && $_POST['ville'] !="" && $_POST['numCNI'] !="" && $_POST['dateCNI'] !="" && $_POST['parCNI'] !="") {
     try {
         include 'inc_bdd.php';
 
@@ -49,15 +28,12 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !=
 
         // On test si un résultat est retourné
         while ($ligneDoublon = $resultat_select->fetch()) {
-
             $okDoublon = true;
         }
 
         if ($okDoublon) {
-
-            header("Location:reservation.php?erreur_reservation=" . urlencode("*Cette adresse e-mail est déjà utilisée pour cette réservation"));
+            echo "*Cette adresse e-mail est déjà utilisée pour cette réservation";
         } else {
-
             $id_vg = $_GET['idVG'];
             $addresse = htmlspecialchars($_POST['addresse']);
             $postal = htmlspecialchars($_POST['postal']);
@@ -66,8 +42,8 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !=
             $dateCNI = htmlspecialchars($_POST['dateCNI']);
             $parCNI = htmlspecialchars($_POST['parCNI']);
             $immatriculation = htmlspecialchars($_POST['immatriculation']);
-            $nbrEmplacement = htmlspecialchars($_POST['nbrEmplacement']);
             $commentaire = htmlspecialchars($_POST['remarque']);
+            $emplacements = json_decode($_POST['emplacements'])->emplacements;
 
             $sql0 = "SELECT NBREEMPLINDISPO_VG FROM videgrenier WHERE id_vg = :id";
 
@@ -76,11 +52,10 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !=
             $resultat0->execute();
             $nbrPlaceRestant = $resultat0->fetchColumn();
   
-            $nbrPlaceRestantApresResa = (int) ($nbrPlaceRestant - $nbrEmplacement);
+            $nbrPlaceRestantApresResa = (int) ($nbrPlaceRestant - count($emplacements));
 
-            if ($nbrPlaceRestantApresResa <= 0){
-
-                header("Location:reservation.php?erreur_reservation=" . urlencode("*Désoler, plus de places disponibles"));
+            if ($nbrPlaceRestantApresResa <= 0) {
+                echo "*Désoler, plus de places disponibles";
             }
 
             $update_place = "UPDATE videgrenier SET NBREEMPLINDISPO_VG = :restant WHERE id_vg = :id";
@@ -95,8 +70,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !=
 
             $localIP = $_SERVER['REMOTE_ADDR'];
 
-            if($localIP == '::1')
-            {
+            if ($localIP == '::1') {
                 $localIP = '127.0.0.1';
             }
 
@@ -157,40 +131,28 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['addresse'] !=
             $resultat_resa->bindParam(':id_exp', $id_exposant);
             $resultat_resa->bindParam(':type', $type);
             $resultat_resa->bindParam(':numPlace', $numPlace);
-            $resultat_resa->bindParam(':nbPlace', $nbrEmplacement);
+            $resultat_resa->bindParam(':nbPlace', count($emplacements));
 
             $resultat_resa->execute();
 
+            $lastIdReservation = $base->lastInsertId();
+            foreach ($emplacements as $key => $emplacement) {
+                $insert_placer = "INSERT INTO `placer`(`Id_Reservation`, `Id_PlanPosition`) VALUES (:idReservation, :idPlanPosition)";
+                $resultat_placer = $base->prepare($insert_placer);
 
+                $resultat_placer->bindParam(':idReservation', $lastIdReservation);
+                $resultat_placer->bindParam(':idPlanPosition', $emplacement->ID_POSITION);
+
+                $resultat_placer->execute();
+            }
             echo "<section id=\"resaValidée\" class=\"boxSite\">Votre réservation est validée!<br/>
-        <a class=\"nav-link\" href=\"mon_compte.php\">Voir mon compte</a></section>";
+            <a class=\"nav-link\" href=\"mon_compte.php\">Voir mon compte</a></section>";
         }
     } catch (Exception $e) {
-
         die('Erreur : ' . $e->getMessage());
     } finally {
-
         $base = null; //fermeture de la connexion
     }
-    ?>
-
-
-
-    <?php
-    include 'inc_footer.php';
-    ?>
-
-    <script src="../js/jquery-3.5.0.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/myscript.js"></script>
-</body>
-
-</html>
-
-<?php
-
 } else {
-
-    header("Location:accueil.php");
+    echo "*tous les champs obligatoires ne sont pas remplis";
 }
-?>
