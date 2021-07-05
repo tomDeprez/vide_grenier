@@ -231,7 +231,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         $(document).ready(function() {
             $.ajax({
                 type: "POST",
-                url: "reservation_plan.php",
+                url: "reservation_plan.php?idVG=<?php echo $_GET['idVG']?>",
                 data: "html",
                 success: function(retour) {
                     document.getElementById('Emplacement').innerHTML = retour;

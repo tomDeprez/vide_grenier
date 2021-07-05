@@ -23,14 +23,12 @@ const LARGEURE_CASE = 1;
                 $info_position->bindParam(':id', $id_cellule);
                 $info_position->execute();
                 $tab_info_position = $info_position->fetch();?>
-
-                <td id="<?= $id_cellule ?>"data-toggle='tooltip' data-placement='top' style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" <?php echo $tab_info_position['ID_PLANLEGENDE'] == "11" || $tab_info_position['ID_PLANLEGENDE'] == "12" || $tab_info_position['ID_PLANLEGENDE'] == "13" ? "onclick='choisirEmplacement(this)' title='".$tab_info_position['LIBELLE_LEGENDE']." disponible'" : "title='".$tab_info_position['LIBELLE_LEGENDE']."'" ?> colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
                 <?php if ($_GET['idVG'] == $tab_info_position['ID_VG']) { ?>
-                    <td id="reserved" style="background-color: #D63700" colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
+                    <td id="reserved" style="background-color: #D63700" <?php echo "title='".$tab_info_position['LIBELLE_LEGENDE']." indisponible'"; ?> colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
                         <?= $tab_info_position['CONTENT_POSITION'] ?>
                     </td>
                 <?php } else { ?>
-                    <td id="<?= $id_cellule ?>" style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
+                    <td id="<?= $id_cellule ?>" style="background-color: <?= $tab_info_position['COULEUR_LEGENDE'] ?>" <?php echo $tab_info_position['ID_PLANLEGENDE'] == "11" || $tab_info_position['ID_PLANLEGENDE'] == "12" || $tab_info_position['ID_PLANLEGENDE'] == "13" ? "onclick='choisirEmplacement(this)' title='".$tab_info_position['LIBELLE_LEGENDE']." disponible'" : "title='".$tab_info_position['LIBELLE_LEGENDE']."'" ?> colspan=<?= $tab_info_position['LARGEUR_POSITION'] ?>>
                         <?= $tab_info_position['CONTENT_POSITION'] ?>
                     </td>
                 <?php } ?>
