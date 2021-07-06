@@ -21,7 +21,7 @@ session_start();
         {
             echo '<section class="boxSite text-center">
                     <h2>Erreur, tout les champs ne sont pas remplie</h2>
-                  </section>';
+                  </section>'; 
         }
         else
         {
