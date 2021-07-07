@@ -586,8 +586,8 @@ ALTER TABLE vide_grenier.utilisateur
   ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`ID_ROL`) REFERENCES `role` (`ID_ROL`);
 
 ALTER TABLE vide_grenier.Placer
-    ADD CONSTRAINT `placer_ibfk_1` FOREIGN KEY(Id_Reservation) REFERENCES Reservation(ID_RES),
-    ADD CONSTRAINT `placer_ibfk_2` FOREIGN KEY(Id_PlanPosition) REFERENCES PlanPosition(ID_POSITION);
+    ADD CONSTRAINT `placer_ibfk_1` FOREIGN KEY(Id_Reservation) REFERENCES vide_grenier.Reservation(ID_RES),
+    ADD CONSTRAINT `placer_ibfk_2` FOREIGN KEY(Id_PlanPosition) REFERENCES vide_grenier.PlanPosition(ID_POSITION);
 
 COMMIT;
 
